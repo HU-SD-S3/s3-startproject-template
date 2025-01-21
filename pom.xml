@@ -8,11 +8,11 @@
         <version>3.3.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>nl.hu.bep2</groupId>
-    <artifactId>casino</artifactId>
+    <groupId>nl.hu.s3</groupId>
+    <artifactId>project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bep2-huland-casino</name>
-    <description>Student project for BEP2</description>
+    <name>s3-project</name>
+    <description>Student project for S3</description>
 
     <properties>
         <java.version>21</java.version>

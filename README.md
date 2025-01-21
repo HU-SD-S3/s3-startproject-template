@@ -1,6 +1,5 @@
-# HUland Casino Project
-This project is part of an assignment for the
-course Backend Programming 2 (BEP2) at the
+# S3 Project
+This project is part of an assignment for 3rd semester of the ICT bachelor programme at the
 Hogeschool Utrecht, University of Applied Sciences.
 
 ## Starter project
@@ -10,9 +9,7 @@ This starter project contains the following:
 third-party libraries and frameworks (see: `pom.xml`)
 * A preconfigured Spring project
 * A component for JWT-based 
-user authentication and authorisation (`nl.hu.bep2.casino.security`)
-* A component for basic 
-chip functionality (`nl.hu.bep2.casino.chips`)
+user authentication and authorisation (`nl.hu.s3.project.security`)
 * A container-based development environment for PostgreSQL 
 (see: `development/db/Dockerfile` and `docker-compose.yml`)
 
@@ -36,14 +33,6 @@ while the current directory is the root of this project.
 Docker will then start a PostgreSQL container, based on the official PostgreSQL image, with
 the configuration stated in the `docker-compose.yml` and in `development/db`.
 
-This creates a container with a database-admin user with the username and password `postgres`/`admin`. These credentials
-can be used for example in a database-administration tool like PGAdmin.
-It also creates a database-user, password and database for the application, all called `bep2-huland-casino`. These credentials
-are not meant to be used manually, but they make sure that our application can only control its own database and not
-(hypothetically) other applications running databases on the same server.
-
-It does *not* create an application-user. That will happen later when [creating users](#registration) in (for example) Postman.
-
 ### Troubleshooting Docker
 If you already have PostgreSQL running in the background
 and you don't want to stop that process,
@@ -63,65 +52,15 @@ make sure Docker is allowed to use the host's network.
 If all else fails, setup your database manually according
 to the steps explained above. Remember: it is OK to ask for help!
 
-
-## Project setup without Docker
-If you are not using Docker for your database, you need 
-[PostgreSQL 12](https://www.postgresql.org/) or higher to be installed.
-For the application to work, we need the correct user and database
-to be created. In PostgreSQL, create the user `bep2-huland-casino`
-with the password `bep2-huland-casino` and the database `bep2-huland-casino`.
-
-This can be done with the following SQL-queries (mind the quotation marks).
-
-To create a new user (with the same username/password):
-```postgresql
-CREATE USER "bep2-huland-casino" WITH CREATEDB PASSWORD 'bep2-huland-casino';
-```
-
-To create the database and make the previously created user its owner:
-```postgresql
-CREATE DATABASE "bep2-huland-casino" OWNER "bep2-huland-casino";
-```
-
-> :warning: **Perform this task by executing the SQL query above (do not use a db tool)**  
->  
-> When executing the raw query above Postgres will assume that the user is able to login.  
-> Other DB tools may not have the same behaviour by default, which may cause issues logging in.
-
-You can change these names if you like, but keep in mind
-that you need to also change them in our application configuration
-in `src/resources/application.properties`.
-
-The database interaction is handled by Spring Data.
-Database-specific implementation details are 
-part of another course.
-
 ## Booting
 First, make sure the database is set up, started and reachable.
 
 Start the application via your IDE by running the `CasinoApplication`
 class. Alternatively, run `mvn spring-boot:start`.
 
-
-## Using Postman
-The [Postman HTTP client](https://www.postman.com/product/rest-client/) 
-can be used as an HTTP client for doing
-requests to backend APIs like the one we are building.
-Import, use and extend the collection in this repository
-found in `hu-land-casino.postman_collection.json`.
-
-### Automatic authentication and authorisation
-In this collection, Postman has been configured
-to automatically process the Authorization header from
-the login response and add it as a collection variable.
-
-The collection has been setup to authenticate any
-request using this token.
-
-
 ## How do authentication and authorisation work?
 The security component allows users to register and login.
-Its general configuration is found in `nl.hu.bep2.casino.SecurityConfig`.
+Its general configuration is found in `nl.hu.s3.project.SecurityConfig`.
 Authentication is configured in `...presentation.filter.JwtAuthenticationFilter`,
 while Authorization is handled `...presentation.filter.JwtAuthorizationFilter`.
 
@@ -166,14 +105,3 @@ Authorization header of the response.
 
 Copy this exact header in subsequent requests in order to remain logged in!
 Note that the supplied Postman collection does this automatically!
-
-## Component overview
-Two components, *security* and *chips*, have already been created.
-Students will have to make a new component, *blackjack*.
-Keep in mind that the blackjack component will start with
-an object-oriented domain layer. 
-Other layers will be added as development (and learning) progresses.
-
-It is a good idea to create a package structure that reflects
-the application architecture.
-![Packages for BEP2](docs/bep2-updated-packages.png)

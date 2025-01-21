@@ -1,0 +1,35 @@
+# HU S3 Project
+
+###
+# group: auth
+# @name Register
+POST localhost:8080/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin",
+  "firstName": "Ad",
+  "lastName": "Min"
+}
+
+###
+# group: auth
+# @name Login
+POST localhost:8080/login
+#Accept: application/hal+json
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+> {%
+if (response.status === 200) {
+    const authHeader = response.headers.valueOf("Authorization");
+    const token = authHeader.substring(7);
+    client.global.set("authToken", token);
+}
+
+%}
