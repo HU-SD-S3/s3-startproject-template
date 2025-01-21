@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version>
+        <version>3.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>nl.hu.s3</groupId>
@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <jjwt.version>0.12.5</jjwt.version>
+        <jjwt.version>0.12.6</jjwt.version>
     </properties>
 
     <dependencies>
