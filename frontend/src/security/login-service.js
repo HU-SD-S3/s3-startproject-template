@@ -1,43 +1,50 @@
 const currentUserKey = "current"
 
-export class LoginService {
-    storage = window.sessionStorage;
+
+const storage = window.sessionStorage;
     // alternatief: storage = window.localStorage;
+function setItem(key, obj){
+    storage.setItem(key, JSON.stringify(obj));   
+}
 
+function getItem(key, obj){
+    let result = storage.getItem(key, obj);
+    if(result){
+        return JSON.parse(result);
+    }else {
+        return null;
+    }
+}
+
+export class LoginService {
     constructor(){        
-    }
-
-    #setItem(key, obj){
-        this.storage.setItem(key, JSON.stringify(obj));   
-    }
-
-    #getItem(key, obj){
-        let result = this.storage.getItem(key, obj);
-        if(result){
-            return JSON.parse(result);
-        }else {
-            return null;
-        }
-    }
+    }    
 
     get isLoggedIn(){
-        return this.#getItem(currentUserKey) != null;
+        return getItem(currentUserKey) != null;
     }
 
     get currentUser(){
-        return this.#getItem(currentUserKey);
+        return getItem(currentUserKey);
     }
 
     login(user, password){
+        console.debug('login in service')
         if(!user){
             throw new Error('username cannot be empty');
         }
 
-        return Promise.resolve({
-            name: user,
-            token: "abc123"
-        }).then(u => {
-            this.#setItem(currentUserKey, u);
+        return fetch("/api/login", {
+            method: "POST",
+            body: JSON.stringify({
+               username: user,
+               password: password
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }            
+        }).then(r =>r.json()).then(u => {
+            setItem(currentUserKey, u);
         });
     }
 
@@ -47,5 +54,26 @@ export class LoginService {
 
     logout(){
         this.storage.removeItem(currentUserKey)
+    }
+}
+
+
+export class FakeLoginService extends LoginService {
+    
+    login(user, password){
+        if(!user){
+            throw new Error('username cannot be empty');
+        }
+
+        return Promise.resolve({
+            name: user,
+            token: "abc123"
+        }).then(u => {
+            setItem(currentUserKey, u);
+        });
+    }
+
+    register(registerData){
+        return Promise.resolve();
     }
 }

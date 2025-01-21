@@ -30,6 +30,7 @@ export class CurrentUserElement extends LitElement {
     }
 
     login(e){
+        console.debug("Logging in, in CurrentUserElement")
         this.loginService.login(e.username, e.password).then(() => {
             this.currentUser = this.loginService.currentUser;
         });

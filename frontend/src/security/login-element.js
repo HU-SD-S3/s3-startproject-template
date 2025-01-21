@@ -16,15 +16,16 @@ export class LoginElement extends LitElement {
     this.username = "";
   }
 
-  attemptLogin(e){    
+  attemptLogin(){    
+    console.debug('attempting login');
     this.dispatchEvent(new LoginAttempted(this.input_username, this.input_password));
   }
 
-  requestRegister(e){
+  requestRegister(){
     this.dispatchEvent(new RegisterRequested());
   }
 
-  requestLogout(e){    
+  requestLogout(){    
     this.dispatchEvent(new LogoutRequested());
   }
 

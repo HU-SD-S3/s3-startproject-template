@@ -11,7 +11,7 @@ export class LoginAttempted extends Event {
     constructor(username, password){
         super("attempt-login", {
             bubbles: true,
-            composed: false
+            composed: true
         });
         this.username = username;
         this.password = password;        

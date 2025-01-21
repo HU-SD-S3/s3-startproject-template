@@ -3,7 +3,7 @@
 ###
 # group: auth
 # @name Register
-POST localhost:8080/register
+POST localhost:8080/api/register
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 ###
 # group: auth
 # @name Login
-POST localhost:8080/login
+POST localhost:8080/api/login
 #Accept: application/hal+json
 Content-Type: application/json
 
