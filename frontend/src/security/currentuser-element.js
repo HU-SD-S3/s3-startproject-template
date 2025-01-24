@@ -52,11 +52,11 @@ export class CurrentUserElement extends LitElement {
         } else {
             if (this.currentUser) {
                 return html`
-                <s3-login @request-logout=${this.logout} username=${this.currentUser.name}></s3-login>
+                <s3-login @request-logout=${this.logout} @request-register=${this.navigateRegister} @attempt-login=${this.login} username=${this.currentUser.name}></s3-login>
                 `
             } else {
                 return html`
-                <s3-login @request-register=${this.navigateRegister} @attempt-login=${this.login}></s3-login>
+                <s3-login @request-logout=${this.logout} @request-register=${this.navigateRegister} @attempt-login=${this.login}></s3-login>
             `
             }
         }
