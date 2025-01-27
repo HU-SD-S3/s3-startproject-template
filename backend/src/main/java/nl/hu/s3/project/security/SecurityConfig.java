@@ -1,9 +1,7 @@
 package nl.hu.s3.project.security;
 
-import io.jsonwebtoken.security.Keys;
-import nl.hu.s3.project.security.presentation.filter.JwtAuthenticationFilter;
+import nl.hu.s3.project.security.application.TokenService;
 import nl.hu.s3.project.security.presentation.filter.JwtAuthorizationFilter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,11 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.crypto.SecretKey;
 
 import java.util.List;
 
@@ -50,10 +45,6 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 public class SecurityConfig implements WebMvcConfigurer {
 	private static final String LOGIN_PATH = "/login";
 	private static final String REGISTER_PATH = "/register";
-	@Value("${security.jwt.expiration-in-ms}")
-	private Integer jwtExpirationInMs;
-	@Value("${security.jwt.secret}")
-	private String jwtSecret;
 
 	@Bean
 	protected AuthenticationManager authenticationManager(final PasswordEncoder passwordEncoder, final UserDetailsService userDetailsService) {
@@ -69,9 +60,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	protected SecurityFilterChain filterChain(final HttpSecurity http, final AuthenticationManager authenticationManager) throws Exception {
-		SecretKey signingKey = Keys.hmacShaKeyFor(this.jwtSecret.getBytes());
-
+	protected SecurityFilterChain filterChain(final HttpSecurity http, final AuthenticationManager authenticationManager, TokenService tokenService) throws Exception {
 		http.cors(Customizer.withDefaults())
 		    .csrf(AbstractHttpConfigurer::disable)
 		    .authorizeHttpRequests(r -> r
@@ -80,13 +69,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 				    .requestMatchers(antMatcher("/error")).anonymous()
 				    .anyRequest().authenticated()
 		    )
-		    .addFilterBefore(new JwtAuthenticationFilter(
-				    LOGIN_PATH,
-					signingKey,
-				    jwtExpirationInMs,
-				    authenticationManager
-		    ), UsernamePasswordAuthenticationFilter.class)
-		    .addFilter(new JwtAuthorizationFilter(signingKey, authenticationManager))
+		    .addFilter(new JwtAuthorizationFilter(tokenService, authenticationManager))
 		    .sessionManagement(s -> s.sessionCreationPolicy(STATELESS));
 		return http.build();
 	}

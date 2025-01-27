@@ -2,6 +2,7 @@ package nl.hu.s3.project.security.presentation.filter;
 
 
 import io.jsonwebtoken.*;
+import nl.hu.s3.project.security.application.TokenService;
 import nl.hu.s3.project.security.domain.UserProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,16 +27,17 @@ import java.util.List;
  * the Authorization header of the incoming request.
  */
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-    private final SecretKey signingKey;
+
     private final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
+    private final TokenService tokenService;
 
     public JwtAuthorizationFilter(
-            SecretKey secret,
+            TokenService tokenService,
             AuthenticationManager authenticationManager
     ) {
         super(authenticationManager);
 
-        this.signingKey = secret;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -62,36 +64,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return null;
         }
 
-        try{
-            JwtParser jwtParser = Jwts.parser()
-                    .verifyWith(this.signingKey)
-                    .build();
+        UserProfile user = tokenService.validateToken(token.replace("Bearer ", ""));
 
-            Jws<Claims> parsedToken = jwtParser.parseSignedClaims(token.replace("Bearer ", ""));
-
-            var username = parsedToken.getPayload()
-                    .getSubject();
-
-            var authorities = ((List<?>) parsedToken.getPayload()
-                    .get("rol")).stream()
-                    .map(authority -> new SimpleGrantedAuthority((String) authority))
-                    .toList();
-
-            if (username.isEmpty()) {
-                return null;
-            }
-
-            UserProfile principal = new UserProfile(
-                    username,
-                    (String) parsedToken.getPayload().get("firstName"),
-                    (String) parsedToken.getPayload().get("lastName")
-            );
-
-            return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-        }catch (MalformedJwtException | SignatureException ex){
-            logger.debug(ex.getMessage());
-            return null;
-        }
-
+        return new UsernamePasswordAuthenticationToken(user, null, user.getRoles().stream().map(SimpleGrantedAuthority::new).toList());
     }
 }

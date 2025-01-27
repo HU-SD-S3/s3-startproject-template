@@ -28,6 +28,9 @@ public class UserService implements UserDetailsService {
         String encodedPassword = this.passwordEncoder.encode(password);
 
         User user = new User(username, encodedPassword, firstName, lastName);
+        if(user.getUsername().equals("admin")){
+            user = User.admin(username, encodedPassword, firstName, lastName);
+        }
 
         this.userRepository.save(user);
     }

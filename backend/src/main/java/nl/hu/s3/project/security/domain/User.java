@@ -5,7 +5,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -21,8 +24,10 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    @ElementCollection
+    private List<String> roles = new ArrayList<>();
 
-    public User() {
+    protected User() {
     }
 
     public User(String username, String password, String firstName, String lastName) {
@@ -30,6 +35,13 @@ public class User implements UserDetails {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.roles = List.of("ROLE_USER");
+    }
+
+    public static User admin(String username, String password, String firstName, String lastName){
+        User user = new User(username, password, firstName, lastName);
+        user.roles = List.of("ROLE_ADMIN");
+        return user;
     }
 
     public Long getId() {
@@ -53,6 +65,7 @@ public class User implements UserDetails {
         return lastName;
     }
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -75,6 +88,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return this.roles.stream().map(SimpleGrantedAuthority::new).toList();
+    }
+
+    public UserProfile toUserProfile() {
+        return new UserProfile(username, firstName, lastName, Collections.unmodifiableList(this.roles));
     }
 }
