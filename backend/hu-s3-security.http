@@ -27,9 +27,12 @@ Content-Type: application/json
 
 > {%
 if (response.status === 200) {
-    const authHeader = response.headers.valueOf("Authorization");
-    const token = authHeader.substring(7);
-    client.global.set("authToken", token);
+    client.global.set("authToken", response.body.token);
 }
 
 %}
+
+###
+# @name Get Current Login
+GET localhost:8080/api/login
+Authorization: Bearer {{authToken}}

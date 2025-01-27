@@ -13,9 +13,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
-    @Value("${chips.start-amount}")
-    private Long chipsStartAmount;
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 

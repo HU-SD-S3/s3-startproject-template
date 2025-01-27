@@ -30,7 +30,6 @@ export class CurrentUserElement extends LitElement {
     }
 
     login(e){
-        console.debug("Logging in, in CurrentUserElement")
         this.loginService.login(e.username, e.password).then(() => {
             this.currentUser = this.loginService.currentUser;
         });
@@ -49,16 +48,10 @@ export class CurrentUserElement extends LitElement {
         //Later behandelen we 'routing', wat een mooiere manier is om dit op te lossen.        
         if (this.registering) {
             return html`<s3-register @attempt-register=${this.register} @request-login=${this.navigateLogin}></s3-register>`
-        } else {
-            if (this.currentUser) {
-                return html`
-                <s3-login @request-logout=${this.logout} @request-register=${this.navigateRegister} @attempt-login=${this.login} username=${this.currentUser.name}></s3-login>
-                `
-            } else {
-                return html`
-                <s3-login @request-logout=${this.logout} @request-register=${this.navigateRegister} @attempt-login=${this.login}></s3-login>
-            `
-            }
+        } else {            
+            return html`
+            <s3-login @request-logout=${this.logout} @request-register=${this.navigateRegister} @attempt-login=${this.login} username=${this.currentUser?.name}></s3-login>
+            `        
         }
     }
 

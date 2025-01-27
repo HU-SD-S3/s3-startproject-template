@@ -1,6 +1,7 @@
 package nl.hu.s3.project.security.presentation.dto;
 
 import nl.hu.s3.project.security.domain.User;
+import nl.hu.s3.project.security.domain.UserProfile;
 
 public class LoginResponse {
     public String username;
@@ -13,6 +14,15 @@ public class LoginResponse {
         userDTO.username = user.getUsername();
         userDTO.firstName = user.getFirstName();
         userDTO.lastName = user.getLastName();
+        userDTO.token = token;
+        return userDTO;
+    }
+
+    public static LoginResponse fromUserProfile(UserProfile profile, String token) {
+        LoginResponse userDTO = new LoginResponse();
+        userDTO.username = profile.getUsername();
+        userDTO.firstName = profile.getFirstName();
+        userDTO.lastName = profile.getLastName();
         userDTO.token = token;
         return userDTO;
     }

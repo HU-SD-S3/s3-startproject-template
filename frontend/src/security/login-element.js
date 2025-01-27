@@ -17,7 +17,6 @@ export class LoginElement extends LitElement {
   }
 
   attemptLogin(){    
-    console.debug('attempting login');
     this.dispatchEvent(new LoginAttempted(this.input_username, this.input_password));
   }
 

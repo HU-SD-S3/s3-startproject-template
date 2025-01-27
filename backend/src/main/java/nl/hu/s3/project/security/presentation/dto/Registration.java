@@ -15,4 +15,11 @@ public class Registration {
 
     @NotBlank
     public String lastName;
+
+    public Registration(String username, String password, String firstName, String lastName) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

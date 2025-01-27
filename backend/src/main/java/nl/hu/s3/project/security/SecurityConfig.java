@@ -21,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
@@ -64,8 +65,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 		http.cors(Customizer.withDefaults())
 		    .csrf(AbstractHttpConfigurer::disable)
 		    .authorizeHttpRequests(r -> r
-				    .requestMatchers(antMatcher(POST, REGISTER_PATH)).permitAll()
-				    .requestMatchers(antMatcher(POST, LOGIN_PATH)).permitAll()
+				    .requestMatchers(antMatcher(POST, REGISTER_PATH), antMatcher(GET, REGISTER_PATH)).permitAll()
+				    .requestMatchers(antMatcher(POST, LOGIN_PATH), antMatcher(GET, REGISTER_PATH)).permitAll()
 				    .requestMatchers(antMatcher("/error")).anonymous()
 				    .anyRequest().authenticated()
 		    )
