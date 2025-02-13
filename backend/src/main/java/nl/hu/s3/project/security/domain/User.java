@@ -15,6 +15,9 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
 
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -35,12 +38,12 @@ public class User implements UserDetails {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.roles = List.of("ROLE_USER");
+        this.roles = List.of(ROLE_USER);
     }
 
     public static User admin(String username, String password, String firstName, String lastName){
         User user = new User(username, password, firstName, lastName);
-        user.roles = List.of("ROLE_ADMIN");
+        user.roles = List.of(ROLE_ADMIN);
         return user;
     }
 

@@ -36,3 +36,13 @@ if (response.status === 200) {
 # @name Get Current Login
 GET localhost:8080/api/login
 Authorization: Bearer {{authToken}}
+
+###
+# @name Get All Users
+GET localhost:8080/api/users
+Authorization: Bearer {{authToken}}
+
+###
+# @name Get Single User
+GET localhost:8080/api/users/admin
+Authorization: Bearer {{authToken}}
