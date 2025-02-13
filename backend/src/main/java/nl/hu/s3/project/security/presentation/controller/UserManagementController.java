@@ -1,6 +1,7 @@
 package nl.hu.s3.project.security.presentation.controller;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.transaction.Transactional;
 import nl.hu.s3.project.security.application.UserService;
 import nl.hu.s3.project.security.domain.User;
 import nl.hu.s3.project.security.presentation.dto.Registration;
@@ -45,13 +46,15 @@ public class UserManagementController {
         return Optional.ofNullable(userService.loadUserByUsername(id)).map(UserDTO::fromUser);
     }
 
+    @Transactional //Deze method slaat stiekem de service laag over, dus moet z'n eigen transactional hebben
     @PutMapping("/users/{id}")
     public Optional<UserDTO> getUser(@PathVariable String id, @Validated @RequestBody UserDTO userDto){
         User user = userService.loadUserByUsername(id);
         if(user == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        userDto.update(user);
+        user.adminUpdate(userDto.firstName(), userDto.lastName(), userDto.enabled());
+        return Optional.of(UserDTO.fromUser(user));
     }
 
     @DeleteMapping("/users/{id}")

@@ -34,15 +34,51 @@ if (response.status === 200) {
 
 ###
 # @name Get Current Login
+# group: auth
 GET localhost:8080/api/login
 Authorization: Bearer {{authToken}}
 
 ###
+# group: admin
+# @name Add User as Admin
+POST localhost:8080/api/users
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test123",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+###
 # @name Get All Users
+# group: admin
 GET localhost:8080/api/users
 Authorization: Bearer {{authToken}}
 
 ###
 # @name Get Single User
-GET localhost:8080/api/users/admin
+# group: admin
+GET localhost:8080/api/users/test
+Authorization: Bearer {{authToken}}
+
+###
+# @name Update Single User
+# group: admin
+PUT localhost:8080/api/users/test
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Test2",
+  "lastName": "User2",
+  "enabled": false
+}
+
+###
+# @name Delete Single User
+# group: admin
+DELETE localhost:8080/api/users/test
 Authorization: Bearer {{authToken}}

@@ -27,6 +27,8 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    private boolean enabled = true;
+
     @ElementCollection
     private List<String> roles = new ArrayList<>();
 
@@ -68,6 +70,12 @@ public class User implements UserDetails {
         return lastName;
     }
 
+    public void adminUpdate(String firstName, String lastName, boolean isEnabled){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.enabled = isEnabled;
+    }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -86,7 +94,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
     @Override
