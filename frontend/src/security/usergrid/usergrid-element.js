@@ -6,6 +6,7 @@ import UsergridService from "./usergrid-service.js";
 export class UsergridElement extends LitElement {
     static get properties() {
         return {
+            currentUser: { type: Object },
             users: {type: Object, state: true}
         }
     }
@@ -13,6 +14,7 @@ export class UsergridElement extends LitElement {
     constructor() {
         super();
         this.users = [];
+        this.currentUser = {};
         this.gridService = new UsergridService();
     }
 
@@ -20,19 +22,18 @@ export class UsergridElement extends LitElement {
         super.connectedCallback();
     }
 
-    firstUpdated(_changedProperties) {
-        return this.gridService.getUsers().then(users => {
-            console.log('huh??', users);
-            this.users = users;
-        }).catch(e => {
-            console.log('huh?', e);
-            this.users = [];
-        })
+    updated(_changedProperties) {
+        if(_changedProperties.has('currentUser')){
+            return this.gridService.getUsers().then(users => {
+                this.users = users;
+            }).catch(e => {
+                this.users = [];
+            })
+        }
     }
 
-
     render() {
-        if (this.gridService.isAdminLoggedIn) {
+        if (this.currentUser?.username === "admin") {
             return html`
                 <table>
                     <thead>

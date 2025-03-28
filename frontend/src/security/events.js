@@ -46,3 +46,14 @@ export class LoginRequested extends Event {
         });
     }
 }
+
+export class UserChanged extends Event {
+    constructor(user){
+        super("user-changed", {
+            bubbles: true,
+            composed: true
+        });
+        this.user = user;
+    }
+}
+

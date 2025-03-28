@@ -8,6 +8,10 @@ export default class UsergridService {
     }
 
     getUsers() {
+        if(!this.isAdminLoggedIn){
+            return Promise.reject(new Error("Not authorized"));
+        }
+
         return fetch("api/users", {
             headers: {
                 'Authorization': `Bearer ${this.loginService.currentUser.token}`

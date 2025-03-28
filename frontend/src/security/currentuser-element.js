@@ -1,5 +1,6 @@
 import { LitElement, css, html } from 'lit'
 import { LoginService } from './login/login-service.js';
+import {UserChanged} from "./events.js";
 // import { FakeLoginService as LoginService } from './login-service'; //Voor nu is dit uncommenten genoeg om de login te faken
 
 export class CurrentUserElement extends LitElement {
@@ -23,6 +24,7 @@ export class CurrentUserElement extends LitElement {
         this.error = "";
         this.loginService.logout();
         this.currentUser = this.loginService.currentUser;
+        this.dispatchEvent(new UserChanged(this.currentUser));
     }
 
     navigateRegister(){
@@ -39,6 +41,7 @@ export class CurrentUserElement extends LitElement {
         this.error = "";
         this.loginService.login(e.username, e.password).then(() => {
             this.currentUser = this.loginService.currentUser;
+            this.dispatchEvent(new UserChanged(this.currentUser));
         }).catch(e => {
             this.error = e.message;
         });
