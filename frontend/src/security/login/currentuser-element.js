@@ -1,14 +1,13 @@
-import { LitElement, css, html } from 'lit'
-import { LoginService } from './login/login-service.js';
-import {UserChanged} from "./events.js";
-// import { FakeLoginService as LoginService } from './login-service'; //Voor nu is dit uncommenten genoeg om de login te faken
+import {LitElement, css, html} from 'lit'
+import {UserChanged} from "../events.js";
 
 export class CurrentUserElement extends LitElement {
     static get properties() {
         return {
-            registering: { type: Boolean },
-            error: { type: String },
-            currentUser: { type: Object, state: true }
+            registering: {type: Boolean},
+            error: {type: String},
+            loginService: {type: Object},
+            currentUser: {type: Object, state: true}
         }
     }
 
@@ -16,28 +15,32 @@ export class CurrentUserElement extends LitElement {
         super();
         this.username = "";
         this.error = "";
-        this.loginService = new LoginService();
-        this.currentUser = this.loginService.currentUser;        
+        this.loginService = null;
+        this.currentUser = null;
     }
 
-    logout(){
+    willUpdate(_changedProperties) {
+        this.currentUser = this.loginService.currentUser;
+    }
+
+    logout() {
         this.error = "";
         this.loginService.logout();
         this.currentUser = this.loginService.currentUser;
         this.dispatchEvent(new UserChanged(this.currentUser));
     }
 
-    navigateRegister(){
+    navigateRegister() {
         this.error = "";
         this.registering = true;
     }
 
-    navigateLogin(){
+    navigateLogin() {
         this.error = "";
         this.registering = false;
     }
 
-    login(e){
+    login(e) {
         this.error = "";
         this.loginService.login(e.username, e.password).then(() => {
             this.currentUser = this.loginService.currentUser;
@@ -47,16 +50,18 @@ export class CurrentUserElement extends LitElement {
         });
     }
 
-    register(e){
-        this.loginService.register(e.data).then(()=>{
+    register(e) {
+        this.loginService.register(e.data).then(() => {
             return this.loginService.login(e.data.username, e.data.password)
-        }).then(()=>{
+        }).then(() => {
             this.registering = false;
-            this.currentUser = this.loginService.currentUser;
         })
     }
 
     render() {
+        console.log("login-user", this.currentUser)
+        console.log("login-service", this.loginService)
+        console.log("login-service-user", this.loginService.currentUser)
         //Later behandelen we 'routing', wat een mooiere manier is om dit op te lossen.
         let error = html`<span class="error">${this.error}</span>`
 
@@ -64,11 +69,12 @@ export class CurrentUserElement extends LitElement {
             return html`
                 ${error}
                 <s3-register @attempt-register=${this.register} @request-login=${this.navigateLogin}></s3-register>`
-        } else {            
+        } else {
             return html`
                 ${error}
-                <s3-login @request-logout=${this.logout} @request-register=${this.navigateRegister} @attempt-login=${this.login} username=${this.currentUser?.username}></s3-login>
-            `        
+                <s3-login @request-logout=${this.logout} @request-register=${this.navigateRegister}
+                          @attempt-login=${this.login} username=${this.currentUser?.username}></s3-login>
+            `
         }
     }
 
@@ -77,7 +83,7 @@ export class CurrentUserElement extends LitElement {
             .error {
                 color: var(--hu-red)
             }
-    `
+        `
     }
 }
 

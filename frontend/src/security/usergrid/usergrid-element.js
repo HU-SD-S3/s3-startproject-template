@@ -24,6 +24,7 @@ export class UsergridElement extends LitElement {
 
     updated(_changedProperties) {
         if(_changedProperties.has('currentUser')){
+            this.gridService.currentUser = this.currentUser;
             return this.gridService.getUsers().then(users => {
                 this.users = users;
             }).catch(e => {
@@ -33,6 +34,8 @@ export class UsergridElement extends LitElement {
     }
 
     render() {
+        console.log("grid-user", this.currentUser)
+
         if (this.currentUser?.username === "admin") {
             return html`
                 <table>
@@ -47,6 +50,7 @@ export class UsergridElement extends LitElement {
                     </thead>
                     <tbody>
                     ${map(this.users, u => html`
+                        <tr>
                         <td>${u.username}</td>
                         <td>${u.firstName}</td>
                         <td>${u.lastName}</td>
@@ -54,7 +58,9 @@ export class UsergridElement extends LitElement {
                         <td>
                             <button type="button">Edit</button>
                             <button type="button">Delete</button>
+                            <button type="button" disabled>Reset Password</button>
                         </td>
+                        </tr>
                     `)}
                     </tbody>
                     <tfoot>

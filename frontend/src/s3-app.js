@@ -22,13 +22,14 @@ export class AppElement extends LitElement {
   }
 
   render() {
+    console.log("app-user", this.currentUser)
     return html`
     <header>
       <img src=${huLogo} class="logo" alt="HU Logo"/><h1>${this.title}</h1>
     </header>    
     <section>
       <s3-usergrid .currentUser="${this.currentUser}"></s3-usergrid>
-      <s3-currentuser @user-changed="${this.userChanged}" .login-service="${this.loginService}"></s3-currentuser>
+      <s3-currentuser @user-changed="${this.userChanged}" .loginService="${this.loginService}"></s3-currentuser>
     </section>
     `
   }

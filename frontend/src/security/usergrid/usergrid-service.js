@@ -1,10 +1,12 @@
 import {LoginService} from "../login/login-service.js";
 
 export default class UsergridService {
-    loginService = new LoginService();
+    constructor(currentUser) {
+        this.currentUser = currentUser;
+    }
 
     get isAdminLoggedIn(){
-        return this.loginService.isLoggedIn && this.loginService.currentUser.username === "admin";
+        return this.currentUser?.username === "admin";
     }
 
     getUsers() {
@@ -14,7 +16,7 @@ export default class UsergridService {
 
         return fetch("api/users", {
             headers: {
-                'Authorization': `Bearer ${this.loginService.currentUser.token}`
+                'Authorization': `Bearer ${this.currentUser?.token}`
             }
         }).then(r => {
             if(r.ok){
