@@ -1,4 +1,5 @@
 import "./s3-app"
 import "./security/currentuser-element"
-import "./security/login-element"
-import "./security/register-element"
+import "./security/login/login-element.js"
+import "./security/login/register-element.js"
+import "./security/usergrid/usergrid-element.js"

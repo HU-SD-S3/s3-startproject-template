@@ -1,5 +1,5 @@
 import { LitElement, css, html } from 'lit'
-import { LoginAttempted, LogoutRequested, RegisterRequested } from "./events"
+import { LoginAttempted, LogoutRequested, RegisterRequested } from "../events.js"
 
 export class LoginElement extends LitElement {
   static get properties() {

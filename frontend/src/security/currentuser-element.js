@@ -1,5 +1,5 @@
 import { LitElement, css, html } from 'lit'
-import { LoginService } from './login-service';
+import { LoginService } from './login/login-service.js';
 // import { FakeLoginService as LoginService } from './login-service'; //Voor nu is dit uncommenten genoeg om de login te faken
 
 export class CurrentUserElement extends LitElement {
