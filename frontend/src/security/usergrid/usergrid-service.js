@@ -49,7 +49,7 @@ export default class UsergridService {
     }
 
     updateUser(user) {
-        return fetch(`api/users/${user.id}`, {
+        return fetch(`api/users/${user.username}`, {
             method: "PUT",
             body: JSON.stringify(user),
             headers: this.#headers

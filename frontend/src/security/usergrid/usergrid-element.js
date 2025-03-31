@@ -35,6 +35,10 @@ export class UsergridElement extends LitElement {
         this.gridService.deleteUser(e.user.username).then(() => this.#refresh());
     }
 
+    save(e){
+        this.gridService.updateUser(e.user).then(() => this.#refresh());
+    }
+
     render() {
         if (this.currentUser?.username === "admin") {
             return html`
@@ -50,16 +54,11 @@ export class UsergridElement extends LitElement {
                     </thead>
                     <tbody>
                     ${map(this.users, u => html`
-                        <usergrid-row .user="${u}" @user-delete="${this.delete}"></usergrid-row>
+                        <usergrid-row .user="${u}"
+                                      @user-save="${this.save}"
+                                      @user-delete="${this.delete}"></usergrid-row>
                     `)}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5">
-                                <button type="button" disabled>New</button>        
-                            </td>
-                        </tr>                        
-                    </tfoot>
                 </table>
             `;
         }else {

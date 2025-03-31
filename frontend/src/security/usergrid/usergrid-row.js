@@ -1,5 +1,7 @@
 import {css, html, LitElement} from "lit";
-import {DeleteUserClicked} from "../events.js";
+import {DeleteUserClicked, SaveUserClicked} from "../events.js";
+import {when} from 'lit/directives/when.js';
+
 
 export class UsergridRow extends LitElement {
     static get properties() {
@@ -15,22 +17,49 @@ export class UsergridRow extends LitElement {
         this.editing = false;
     }
 
-    delete(){
+    startEdit(e){
+        this.editing = true;
+    }
+
+    cancelEdit(e){
+        this.editing = false;
+    }
+
+    saveEdit(e){
+        const firstName = this.renderRoot.querySelector('input[name="firstName"]').value;
+        const lastName = this.renderRoot.querySelector('input[name="lastName"]').value;
+        const enabled = this.renderRoot.querySelector('input[name="enabled"]').checked;
+
+        this.dispatchEvent(new SaveUserClicked({...this.user, firstName, lastName, enabled}));
+        this.editing = false;
+    }
+
+    delete() {
         this.dispatchEvent(new DeleteUserClicked(this.user))
     }
 
     render() {
         return html`
+            ${when(this.editing, () => html`
+                <td>${this.user.username}</td>
+                <td><input type="text" name="firstName" value="${this.user.firstName}"></td>
+                <td><input type="text" name="lastName" value="${this.user.lastName}"></td>
+                <td><input type="checkbox" name="enabled" ?checked="${this.user.enabled}"></td>
+                <td>                    
+                    <button type="button" @click="${this.cancelEdit}">Cancel</button>
+                    <button type="button" @click="${this.saveEdit}">Save</button>
+                </td>            
+            `, () => html`
                 <td>${this.user.username}</td>
                 <td>${this.user.firstName}</td>
                 <td>${this.user.lastName}</td>
                 <td>${this.user.enabled}</td>
                 <td>
-                    <button type="button">Edit</button>
+                    <button type="button" @click="${this.startEdit}">Edit</button>
                     <button type="button" @click="${this.delete}">Delete</button>
-                <button type="button" disabled>Reset Password</button>
-            </td>
-        `;
+                    <button type="button" disabled>Reset Password</button>
+                </td>
+            `)}`;
     }
 
     static get styles() {
@@ -41,7 +70,6 @@ export class UsergridRow extends LitElement {
         `
     }
 }
-
 
 
 window.customElements.define('usergrid-row', UsergridRow)

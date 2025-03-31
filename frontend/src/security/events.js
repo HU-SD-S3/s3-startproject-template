@@ -59,7 +59,18 @@ export class UserChanged extends Event {
 
 export class DeleteUserClicked extends Event {
     constructor(user){
-        super("delete-user", {
+        super("user-delete", {
+            bubbles: true,
+            composed: true
+        });
+        this.user = user;
+    }
+}
+
+
+export class SaveUserClicked extends Event {
+    constructor(user){
+        super("user-save", {
             bubbles: true,
             composed: true
         });
