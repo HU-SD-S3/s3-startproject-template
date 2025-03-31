@@ -2,7 +2,6 @@ import {LitElement, css, html} from 'lit'
 import {map} from 'lit/directives/map.js';
 import UsergridService from "./usergrid-service.js";
 
-
 export class UsergridElement extends LitElement {
     static get properties() {
         return {
@@ -18,24 +17,25 @@ export class UsergridElement extends LitElement {
         this.gridService = new UsergridService();
     }
 
-    connectedCallback() {
-        super.connectedCallback();
+    #refresh(){
+        return this.gridService.getUsers().then(users => {
+            this.users = users;
+        }).catch(e => {
+            this.users = [];
+        })
     }
 
     updated(_changedProperties) {
         if(_changedProperties.has('currentUser')){
-            this.gridService.currentUser = this.currentUser;
-            return this.gridService.getUsers().then(users => {
-                this.users = users;
-            }).catch(e => {
-                this.users = [];
-            })
+            return this.#refresh();
         }
     }
 
-    render() {
-        console.log("grid-user", this.currentUser)
+    delete(e){
+        this.gridService.deleteUser(e.user.username).then(() => this.#refresh());
+    }
 
+    render() {
         if (this.currentUser?.username === "admin") {
             return html`
                 <table>
@@ -50,23 +50,13 @@ export class UsergridElement extends LitElement {
                     </thead>
                     <tbody>
                     ${map(this.users, u => html`
-                        <tr>
-                        <td>${u.username}</td>
-                        <td>${u.firstName}</td>
-                        <td>${u.lastName}</td>
-                        <td>${u.enabled}</td>
-                        <td>
-                            <button type="button">Edit</button>
-                            <button type="button">Delete</button>
-                            <button type="button" disabled>Reset Password</button>
-                        </td>
-                        </tr>
+                        <usergrid-row .user="${u}" @user-delete="${this.delete}"></usergrid-row>
                     `)}
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="5">
-                                <button type="button">New</button>        
+                                <button type="button" disabled>New</button>        
                             </td>
                         </tr>                        
                     </tfoot>

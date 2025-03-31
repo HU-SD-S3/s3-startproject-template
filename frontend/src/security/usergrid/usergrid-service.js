@@ -1,27 +1,32 @@
-import {LoginService} from "../login/login-service.js";
+import {getCurrentUser} from "../login/login-service.js";
 
 export default class UsergridService {
-    constructor(currentUser) {
-        this.currentUser = currentUser;
+    constructor() {
+
     }
 
-    get isAdminLoggedIn(){
-        return this.currentUser?.username === "admin";
+    get isAdminLoggedIn() {
+        return getCurrentUser()?.username === "admin";
+    }
+
+    get #headers() {
+        return {
+            'Authorization': `Bearer ${getCurrentUser()?.token}`,
+            "Content-Type": "application/json"
+        }
     }
 
     getUsers() {
-        if(!this.isAdminLoggedIn){
+        if (!this.isAdminLoggedIn) {
             return Promise.reject(new Error("Not authorized"));
         }
 
         return fetch("api/users", {
-            headers: {
-                'Authorization': `Bearer ${this.currentUser?.token}`
-            }
+            headers: this.#headers
         }).then(r => {
-            if(r.ok){
+            if (r.ok) {
                 return r.json();
-            }else{
+            } else {
                 return r.json().then(e => {
                     throw new Error(`Error fetchingusers: ${JSON.stringify(e)}`);
                 })
@@ -30,16 +35,16 @@ export default class UsergridService {
     }
 
     getUser(id) {
-        return fetch(`api/users/${id}`).then(r => r.json());
+        return fetch(`api/users/${id}`,{
+            headers: this.#headers
+        }).then(r => r.json());
     }
 
     createUser(user) {
         return fetch("api/users", {
             method: "POST",
             body: JSON.stringify(user),
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: this.#headers
         });
     }
 
@@ -47,15 +52,14 @@ export default class UsergridService {
         return fetch(`api/users/${user.id}`, {
             method: "PUT",
             body: JSON.stringify(user),
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: this.#headers
         }).then(r => r.json());
     }
 
     deleteUser(id) {
         return fetch(`api/users/${id}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: this.#headers,
         });
     }
 

@@ -1,12 +1,12 @@
 import {LitElement, css, html} from 'lit'
 import {UserChanged} from "../events.js";
+import {loginService} from "./login-service.js";
 
 export class CurrentUserElement extends LitElement {
     static get properties() {
         return {
             registering: {type: Boolean},
             error: {type: String},
-            loginService: {type: Object},
             currentUser: {type: Object, state: true}
         }
     }
@@ -15,32 +15,36 @@ export class CurrentUserElement extends LitElement {
         super();
         this.username = "";
         this.error = "";
-        this.loginService = null;
-        this.currentUser = null;
+        this.loginService = loginService;
+        this.currentUser = loginService.currentUser;
     }
 
-    willUpdate(_changedProperties) {
-        this.currentUser = this.loginService.currentUser;
-    }
+    logout(e) {
+        e.stopPropagation();
 
-    logout() {
         this.error = "";
         this.loginService.logout();
         this.currentUser = this.loginService.currentUser;
         this.dispatchEvent(new UserChanged(this.currentUser));
     }
 
-    navigateRegister() {
+    navigateRegister(e) {
+        e.stopPropagation();
+
         this.error = "";
         this.registering = true;
     }
 
-    navigateLogin() {
+    navigateLogin(e) {
+        e.stopPropagation();
+
         this.error = "";
         this.registering = false;
     }
 
     login(e) {
+        e.stopPropagation();
+
         this.error = "";
         this.loginService.login(e.username, e.password).then(() => {
             this.currentUser = this.loginService.currentUser;
@@ -52,9 +56,11 @@ export class CurrentUserElement extends LitElement {
 
     register(e) {
         this.loginService.register(e.data).then(() => {
-            return this.loginService.login(e.data.username, e.data.password)
+            return this.loginService.login(e.data.username, e.data.password);
         }).then(() => {
+            this.currentUser = this.loginService.currentUser;
             this.registering = false;
+            this.dispatchEvent(new UserChanged(this.currentUser));
         })
     }
 

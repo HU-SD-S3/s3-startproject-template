@@ -17,7 +17,7 @@ function getItem(key, obj) {
     }
 }
 
-export class LoginService {
+class LoginService {
     constructor() {
     }
 
@@ -73,7 +73,7 @@ export class LoginService {
 }
 
 
-export class FakeLoginService extends LoginService {
+class FakeLoginService extends LoginService {
     login(user, password) {
         if (!user) {
             throw new Error('username cannot be empty');
@@ -91,3 +91,6 @@ export class FakeLoginService extends LoginService {
         return Promise.resolve();
     }
 }
+
+export const loginService= new LoginService();
+export const getCurrentUser = () => loginService.currentUser;

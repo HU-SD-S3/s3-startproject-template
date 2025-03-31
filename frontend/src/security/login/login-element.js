@@ -12,7 +12,7 @@ export class LoginElement extends LitElement {
   input_password;
 
   constructor() {
-    super()
+    super();
     this.username = "";
   }
 

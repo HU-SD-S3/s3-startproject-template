@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit'
 import huLogo from './assets/hu-logo.svg'
-import {LoginService} from "./security/login/login-service.js";
+import { getCurrentUser } from "./security/login/login-service.js";
 
 export class AppElement extends LitElement {
   static get properties() {
@@ -11,10 +11,9 @@ export class AppElement extends LitElement {
   }
 
   constructor() {
-    super()
-    this.loginService = new LoginService();
+    super();
     this.title = "Dummy Title";
-    this.currentUser = this.loginService.currentUser;
+    this.currentUser = getCurrentUser();
   }
 
   userChanged(e){
@@ -29,7 +28,7 @@ export class AppElement extends LitElement {
     </header>    
     <section>
       <s3-usergrid .currentUser="${this.currentUser}"></s3-usergrid>
-      <s3-currentuser @user-changed="${this.userChanged}" .loginService="${this.loginService}"></s3-currentuser>
+      <s3-currentuser @user-changed="${this.userChanged}"></s3-currentuser>
     </section>
     `
   }
