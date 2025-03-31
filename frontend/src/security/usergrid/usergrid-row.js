@@ -20,7 +20,7 @@ export class UsergridRow extends LitElement {
     }
 
     render() {
-        return html`<tr>
+        return html`
                 <td>${this.user.username}</td>
                 <td>${this.user.firstName}</td>
                 <td>${this.user.lastName}</td>
@@ -30,7 +30,7 @@ export class UsergridRow extends LitElement {
                     <button type="button" @click="${this.delete}">Delete</button>
                 <button type="button" disabled>Reset Password</button>
             </td>
-        </tr>`;
+        `;
     }
 
     static get styles() {
