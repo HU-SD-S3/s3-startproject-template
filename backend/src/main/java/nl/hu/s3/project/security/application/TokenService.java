@@ -64,7 +64,7 @@ public class TokenService {
                     .toList();
 
             if (username.isEmpty()) {
-                return null;
+                throw new JwtException("Unable to validate token");
             }
 
             return new UserProfile(
@@ -75,7 +75,7 @@ public class TokenService {
             );
         } catch (MalformedJwtException | SignatureException ex) {
             logger.debug(ex.getMessage());
-            return null;
+            throw new JwtException("Unable to validate token");
         }
     }
 }

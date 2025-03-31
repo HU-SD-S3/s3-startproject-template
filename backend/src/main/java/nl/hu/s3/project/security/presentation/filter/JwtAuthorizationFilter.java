@@ -52,20 +52,24 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private Authentication getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+        try {
+            String token = request.getHeader("Authorization");
 
-        if (token == null || token.isEmpty()) {
-            logger.debug("Authorization header is null or empty");
+            if (token == null || token.isEmpty()) {
+                logger.debug("Authorization header is null or empty");
+                return null;
+            }
+
+            if (!token.startsWith("Bearer ")) {
+                logger.debug("Authorization header does not start with Bearer");
+                return null;
+            }
+
+            UserProfile user = tokenService.validateToken(token.replace("Bearer ", ""));
+
+            return new UsernamePasswordAuthenticationToken(user, null, user.getRoles().stream().map(SimpleGrantedAuthority::new).toList());
+        } catch (Exception e) {
             return null;
         }
-
-        if (!token.startsWith("Bearer ")) {
-            logger.debug("Authorization header does not start with Bearer");
-            return null;
-        }
-
-        UserProfile user = tokenService.validateToken(token.replace("Bearer ", ""));
-
-        return new UsernamePasswordAuthenticationToken(user, null, user.getRoles().stream().map(SimpleGrantedAuthority::new).toList());
     }
 }
