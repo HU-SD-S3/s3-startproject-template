@@ -14,6 +14,6 @@ services:
       - POSTGRES_PASSWORD=admin
     volumes:
       # Required volume: creates the initial db and user
-      - "./development/db:/docker-entrypoint-initdb.d"
+      - "./database/mount:/docker-entrypoint-initdb.d"
       # Optional volume: saves data between docker runs
-      - "./data:/var/lib/postgresql/data"
+      - "./database/data:/var/lib/postgresql/data"
