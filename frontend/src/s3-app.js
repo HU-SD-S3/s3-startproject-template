@@ -1,53 +1,57 @@
-import { LitElement, css, html } from 'lit'
+import {LitElement, css, html} from 'lit'
 import huLogo from './assets/hu-logo.svg'
-import { getCurrentUser } from "./security/login/login-service.js";
+import {getCurrentUser} from "./security/login/login-service.js";
 
 export class AppElement extends LitElement {
-  static get properties() {
-    return {
-      title: { type: String },
-      currentUser: { type: Object, state: true }
+    static get properties() {
+        return {
+            title: {type: String},
+            currentUser: {type: Object, state: true}
+        }
     }
-  }
 
-  constructor() {
-    super();
-    this.title = "Dummy Title";
-    this.currentUser = getCurrentUser();
-  }
+    constructor() {
+        super();
+        this.title = "Dummy Title";
+        this.currentUser = getCurrentUser();
+    }
 
-  userChanged(e){
-    this.currentUser = e.user;
-  }
+    userChanged(e) {
+        this.currentUser = e.user;
+    }
 
-  render() {
-    console.log("app-user", this.currentUser)
-    return html`
-    <header>
-      <img src=${huLogo} class="logo" alt="HU Logo"/><h1>${this.title}</h1>
-    </header>    
-    <section>
-      <s3-usergrid .currentUser="${this.currentUser}"></s3-usergrid>
-      <s3-currentuser @user-changed="${this.userChanged}"></s3-currentuser>
-    </section>
-    `
-  }
+    render() {
+        console.log("app-user", this.currentUser)
+        return html`
+            <header>
+                <img src=${huLogo} class="logo" alt="HU Logo"/>
+                <h1>${this.title}</h1>
+            </header>
+            <section>
+                <todos-list .currentUser=${this.currentUser}></todos-list>
+            </section>
+            <section>
+                <s3-usergrid .currentUser="${this.currentUser}"></s3-usergrid>
+                <s3-currentuser @user-changed="${this.userChanged}"></s3-currentuser>
+            </section>
+        `
+    }
 
-  static get styles() {
-    return css`
-      :host {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 2rem;
-        text-align: center;
-      }
-      
-      .logo {
-        height: 6em;
-        padding: 1.5em;
-      }
-    `
-  }
+    static get styles() {
+        return css`
+            :host {
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: 2rem;
+                text-align: center;
+            }
+
+            .logo {
+                height: 6em;
+                padding: 1.5em;
+            }
+        `
+    }
 }
 
 window.customElements.define('s3-app', AppElement)
