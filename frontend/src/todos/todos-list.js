@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import {TodosService} from "./todos-service.js";
 import {map} from "lit/directives/map.js";
+import {repeat} from "lit/directives/repeat.js";
 
 export class TodosList extends LitElement {
     static get properties() {
@@ -39,7 +40,7 @@ export class TodosList extends LitElement {
         return html`
             <h2>Todos</h2>
             <ul>
-                ${map(this.todos, todo => html`
+                ${repeat(this.todos, t => t.id,  todo => html`
                     <li>
                         <todos-item 
                                 @todos-check-changed=${this.todoChanged(todo)}
