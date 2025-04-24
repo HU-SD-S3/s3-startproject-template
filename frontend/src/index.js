@@ -9,3 +9,4 @@ import "./security/usergrid/usergrid-row.js"
 
 import "./todos/todos-list.js"
 import "./todos/todos-item.js"
+import "./todos/todos-new-item.js"

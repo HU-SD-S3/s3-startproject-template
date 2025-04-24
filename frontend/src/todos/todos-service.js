@@ -21,5 +21,25 @@ export class TodosService {
         });
     }
 
+    deleteTodo(currentUser, todo){
+        return fetch('/api/todos/' + todo.id, {
+            method: 'DELETE',
+            headers: {
+                'Authorization' : `Bearer ${currentUser.token}`,
+            }
+        });
+    }
+
+    addTodo(currentUser, todo){
+        return fetch('/api/todos' , {
+            method: 'POST',
+            headers: {
+                'Authorization' : `Bearer ${currentUser.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(todo)
+        });
+    }
+
 
 }

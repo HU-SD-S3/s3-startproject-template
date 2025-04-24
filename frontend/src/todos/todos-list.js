@@ -30,10 +30,20 @@ export class TodosList extends LitElement {
         }
     }
 
+    deleteTodo(todo) {
+        return (e) => {
+            this.todosService.deleteTodo(this.currentUser, todo).then(() => this.#refresh());
+        }
+    }
+
     todoChanged(todo) {
         return (e) => {
             this.todosService.updateTodo(this.currentUser, todo).then(() => this.#refresh());
         };
+    }
+
+    createTodo(e) {
+        this.todosService.addTodo(this.currentUser, e.todo).then(() => this.#refresh());
     }
 
     render() {
@@ -44,9 +54,9 @@ export class TodosList extends LitElement {
                     <li>
                         <todos-item 
                                 @todos-check-changed=${this.todoChanged(todo)}
-                                .todo=${todo}></todos-item>
+                                .todo=${todo}></todos-item> <span @click=${this.deleteTodo(todo)} class="command cancel">&#10060;</span>
                     </li>`)}
-                <li><span class="new">....</span></li>
+                <li><todos-new-item @todos-completed=${this.createTodo}></todos-new-item></li>
             </ul>
         `;
     }
@@ -56,9 +66,9 @@ export class TodosList extends LitElement {
             css`
                ul {
                    list-style: none;
-               }
+               }          
                 
-                .new {
+                .command {
                     cursor: pointer;
                 }
             `
