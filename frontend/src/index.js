@@ -10,3 +10,9 @@ import "./security/usergrid/usergrid-row.js"
 import "./todos/todos-list.js"
 import "./todos/todos-item.js"
 import "./todos/todos-new-item.js"
+
+import "./nav-bar.js"
+
+import "./pages/admin-page.js"
+import "./pages/todos-page.js"
+import "./pages/login-page.js"

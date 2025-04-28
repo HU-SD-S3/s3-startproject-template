@@ -1,12 +1,14 @@
 import {LitElement, css, html} from 'lit'
 import huLogo from './assets/hu-logo.svg'
 import {getCurrentUser} from "./security/login/login-service.js";
+import {choose} from 'lit/directives/choose.js';
 
 export class AppElement extends LitElement {
     static get properties() {
         return {
             title: {type: String},
-            currentUser: {type: Object, state: true}
+            currentUser: {type: Object, state: true},
+            currentPage: {type: String, state: true}
         }
     }
 
@@ -14,10 +16,15 @@ export class AppElement extends LitElement {
         super();
         this.title = "Dummy Title";
         this.currentUser = getCurrentUser();
+        this.currentPage = "login";
     }
 
     userChanged(e) {
         this.currentUser = e.user;
+    }
+
+    navigate(e) {
+        this.currentPage = e.page;
     }
 
     render() {
@@ -27,12 +34,13 @@ export class AppElement extends LitElement {
                 <img src=${huLogo} class="logo" alt="HU Logo"/>
                 <h1>${this.title}</h1>
             </header>
+            <nav-bar @nav-requested=${this.navigate} .currentUser=${this.currentUser}></nav-bar>
             <section>
-                <todos-list .currentUser=${this.currentUser}></todos-list>
-            </section>
-            <section>
-                <s3-usergrid .currentUser="${this.currentUser}"></s3-usergrid>
-                <s3-currentuser @user-changed="${this.userChanged}"></s3-currentuser>
+                ${choose(this.currentPage,[
+                    ['login', () => html` <s3-currentuser @user-changed="${this.userChanged}"></s3-currentuser>`],
+                    ['admin', () => html`<s3-usergrid .currentUser="${this.currentUser}"></s3-usergrid>`],
+                    ['todos', () => html`<todos-list .currentUser=${this.currentUser}></todos-list>`]
+                ])}
             </section>
         `
     }
