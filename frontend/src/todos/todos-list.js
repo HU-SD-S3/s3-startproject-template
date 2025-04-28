@@ -1,26 +1,27 @@
 import {css, html, LitElement} from "lit";
 import {TodosService} from "./todos-service.js";
-import {map} from "lit/directives/map.js";
 import {repeat} from "lit/directives/repeat.js";
+import {TodosModel} from "./todos-model.js";
+import {when} from "lit/directives/when.js";
 
 export class TodosList extends LitElement {
     static get properties() {
         return {
             currentUser: { type: Object },
-            todos: {type: Array, state: true}
+            model: {type: Array, state: true}
         }
     }
 
     constructor() {
         super();
-        this.todos = [];
+        this.model = new TodosModel();
         this.currentUser = {};
         this.todosService = new TodosService();
     }
 
     #refresh() {
         return this.todosService.getTodos(this.currentUser).then(todos => {
-            this.todos = todos;
+            this.model = new TodosModel(todos);
         })
     }
 
@@ -38,7 +39,8 @@ export class TodosList extends LitElement {
 
     todoChanged(todo) {
         return (e) => {
-            this.todosService.updateTodo(this.currentUser, todo).then(() => this.#refresh());
+            this.todosService.updateTodo(this.currentUser, todo)
+                .then(() => this.#refresh());
         };
     }
 
@@ -49,8 +51,9 @@ export class TodosList extends LitElement {
     render() {
         return html`
             <h2>Todos</h2>
+            ${when(this.model.allCompleted, () => html`<h3>All Done</h3>`)}
             <ul>
-                ${repeat(this.todos, t => t.id,  todo => html`
+                ${repeat(this.model.todos, t => t.id,  todo => html`
                     <li>
                         <todos-item 
                                 @todos-check-changed=${this.todoChanged(todo)}

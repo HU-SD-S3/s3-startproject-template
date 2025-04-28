@@ -65,9 +65,6 @@ export class CurrentUserElement extends LitElement {
     }
 
     render() {
-        console.log("login-user", this.currentUser)
-        console.log("login-service", this.loginService)
-        console.log("login-service-user", this.loginService.currentUser)
         //Later behandelen we 'routing', wat een mooiere manier is om dit op te lossen.
         let error = html`<span class="error">${this.error}</span>`
 
