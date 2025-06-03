@@ -1,8 +1,6 @@
 package nl.hu.s3.project.security.domain;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import nl.hu.s3.project.security.application.CurrentUser;
 
 import jakarta.persistence.*;
 
@@ -13,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
 
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
@@ -43,7 +41,7 @@ public class User implements UserDetails {
         this.roles = List.of(ROLE_USER);
     }
 
-    public static User admin(String username, String password, String firstName, String lastName){
+    public static User admin(String username, String password, String firstName, String lastName) {
         User user = new User(username, password, firstName, lastName);
         user.roles = List.of(ROLE_ADMIN);
         return user;
@@ -57,7 +55,6 @@ public class User implements UserDetails {
         return username;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -70,39 +67,17 @@ public class User implements UserDetails {
         return lastName;
     }
 
-    public void adminUpdate(String firstName, String lastName, boolean isEnabled){
+    public void adminUpdate(String firstName, String lastName, boolean isEnabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.enabled = isEnabled;
     }
 
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(SimpleGrantedAuthority::new).toList();
-    }
-
-    public UserProfile toUserProfile() {
-        return new UserProfile(username, firstName, lastName, Collections.unmodifiableList(this.roles));
+    public Collection<String> getRoles() {
+        return this.roles;
     }
 }

@@ -2,15 +2,9 @@ package nl.hu.s3.project.security.application;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import nl.hu.s3.project.security.domain.User;
-import nl.hu.s3.project.security.domain.UserProfile;
-import nl.hu.s3.project.security.presentation.filter.JwtAuthorizationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -30,25 +24,25 @@ public class TokenService {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    public String generateToken(UserProfile user) {
+    public String generateToken(CurrentUser user) {
 
-        List<String> roles = user.getRoles();
+        List<String> roles = user.roles();
         String token = Jwts.builder()
                 .header().add("typ", "JWT").and()
                 .issuer("huland-casino-api")
                 .audience().add("huland-casino").and()
-                .subject(user.getUsername())
+                .subject(user.username())
                 .expiration(new Date(System.currentTimeMillis() + this.jwtExpirationInMs))
                 .claim("rol", roles)
-                .claim("firstName", user.getFirstName())
-                .claim("lastName", user.getLastName())
+                .claim("firstName", user.firstName())
+                .claim("lastName", user.lastName())
                 .signWith(this.getSigningKey())
                 .compact();
 
         return token;
     }
 
-    public UserProfile validateToken(String token) {
+    public CurrentUser validateToken(String token) {
         try {
             JwtParser jwtParser = Jwts.parser()
                     .verifyWith(this.getSigningKey())
@@ -67,7 +61,7 @@ public class TokenService {
                 throw new JwtException("Unable to validate token");
             }
 
-            return new UserProfile(
+            return new CurrentUser(
                     username,
                     (String) parsedToken.getBody().get("firstName"),
                     (String) parsedToken.getBody().get("lastName"),

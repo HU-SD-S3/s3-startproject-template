@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import nl.hu.s3.project.security.data.UserRepository;
 import nl.hu.s3.project.security.domain.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,13 +40,13 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) {
         Optional<User> maybeUser = this.userRepository.findByUsername(username);
 
         if (maybeUser.isEmpty()) {
             throw new UsernameNotFoundException(username);
         } else {
-            return maybeUser.get();
+            return new UserDetailsAdapter(maybeUser.get());
         }
     }
 

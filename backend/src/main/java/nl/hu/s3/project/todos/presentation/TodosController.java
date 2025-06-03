@@ -1,6 +1,6 @@
 package nl.hu.s3.project.todos.presentation;
 
-import nl.hu.s3.project.security.domain.UserProfile;
+import nl.hu.s3.project.security.application.CurrentUser;
 import nl.hu.s3.project.todos.application.ToDoService;
 import nl.hu.s3.project.todos.application.dto.ItemDTO;
 import nl.hu.s3.project.todos.application.dto.NewItemDTO;
@@ -20,30 +20,30 @@ public class TodosController {
     }
 
     @GetMapping
-    public List<ItemDTO> getItems(UserProfile user){
-        return this.toDoService.getItems(user.getUsername());
+    public List<ItemDTO> getItems(CurrentUser user){
+        return this.toDoService.getItems(user.username());
     }
 
     @GetMapping("/{id}")
-    public ItemDTO getItem(UserProfile user, @PathVariable Long id){
-        return this.toDoService.getItem(user.getUsername(), id)
+    public ItemDTO getItem(CurrentUser user, @PathVariable Long id){
+        return this.toDoService.getItem(user.username(), id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
     }
 
     @PostMapping
-    public void addItem(UserProfile user, @RequestBody NewItemDTO item){
+    public void addItem(CurrentUser user, @RequestBody NewItemDTO item){
         item.validate();
-        this.toDoService.addItem(user.getUsername(), item);
+        this.toDoService.addItem(user.username(), item);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteItem(UserProfile user, @PathVariable Long id){
-        this.toDoService.deleteItem(user.getUsername(), id);
+    public void deleteItem(CurrentUser user, @PathVariable Long id){
+        this.toDoService.deleteItem(user.username(), id);
     }
 
     @PutMapping("/{id}")
-    public void updateItem(UserProfile user, @PathVariable Long id, @RequestBody UpdateDTO item){
+    public void updateItem(CurrentUser user, @PathVariable Long id, @RequestBody UpdateDTO item){
         item.validate();
-        this.toDoService.updateItem(user.getUsername(), id, item);
+        this.toDoService.updateItem(user.username(), id, item);
     }
 }

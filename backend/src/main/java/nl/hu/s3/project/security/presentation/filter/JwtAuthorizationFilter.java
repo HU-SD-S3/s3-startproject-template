@@ -1,9 +1,8 @@
 package nl.hu.s3.project.security.presentation.filter;
 
 
-import io.jsonwebtoken.*;
 import nl.hu.s3.project.security.application.TokenService;
-import nl.hu.s3.project.security.domain.UserProfile;
+import nl.hu.s3.project.security.application.CurrentUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +17,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Tries to authorize a user, based on the Bearer token (JWT) from
@@ -65,9 +62,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 return null;
             }
 
-            UserProfile user = tokenService.validateToken(token.replace("Bearer ", ""));
+            CurrentUser user = tokenService.validateToken(token.replace("Bearer ", ""));
 
-            return new UsernamePasswordAuthenticationToken(user, null, user.getRoles().stream().map(SimpleGrantedAuthority::new).toList());
+            return new UsernamePasswordAuthenticationToken(user, null, user.roles().stream().map(SimpleGrantedAuthority::new).toList());
         } catch (Exception e) {
             return null;
         }

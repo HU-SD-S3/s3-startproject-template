@@ -57,7 +57,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-		resolvers.add(new UserProfileResolver());
+		resolvers.add(new CurrentUserResolver());
 	}
 
 	@Bean
