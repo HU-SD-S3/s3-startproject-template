@@ -1,6 +1,6 @@
 import {LitElement, css, html} from 'lit'
 import {UserChanged} from "../events.js";
-import {loginService} from "./login-service.js";
+import {loginService} from "../../../services/login-service.js";
 
 export class CurrentUserElement extends LitElement {
     static get properties() {

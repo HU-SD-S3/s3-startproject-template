@@ -1,4 +1,4 @@
-import {getCurrentUser} from "../login/login-service.js";
+import {getCurrentUser} from "./login-service.js";
 
 export default class UsergridService {
     constructor() {

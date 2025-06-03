@@ -1,5 +1,5 @@
 import {css, html, LitElement} from "lit";
-import {TodosService} from "./todos-service.js";
+import {TodosService} from "../../services/todos-service.js";
 import {repeat} from "lit/directives/repeat.js";
 import {TodosModel} from "./todos-model.js";
 import {when} from "lit/directives/when.js";

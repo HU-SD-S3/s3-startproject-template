@@ -1,6 +1,6 @@
 import {LitElement, css, html} from 'lit'
 import huLogo from './assets/hu-logo.svg'
-import {getCurrentUser} from "./security/login/login-service.js";
+import {getCurrentUser} from "./services/login-service.js";
 import {choose} from 'lit/directives/choose.js';
 
 export class AppElement extends LitElement {

@@ -1,6 +1,6 @@
 import {LitElement, css, html} from 'lit'
 import {map} from 'lit/directives/map.js';
-import UsergridService from "./usergrid-service.js";
+import UsergridService from "../../../services/usergrid-service.js";
 
 export class UsergridElement extends LitElement {
     static get properties() {
