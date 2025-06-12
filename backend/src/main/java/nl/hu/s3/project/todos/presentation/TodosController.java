@@ -1,6 +1,6 @@
 package nl.hu.s3.project.todos.presentation;
 
-import nl.hu.s3.project.security.application.CurrentUser;
+import nl.hu.s3.project.security.application.UserTokenData;
 import nl.hu.s3.project.todos.application.ToDoService;
 import nl.hu.s3.project.todos.application.dto.ItemDTO;
 import nl.hu.s3.project.todos.application.dto.NewItemDTO;
@@ -20,29 +20,29 @@ public class TodosController {
     }
 
     @GetMapping
-    public List<ItemDTO> getItems(CurrentUser user){
+    public List<ItemDTO> getItems(UserTokenData user){
         return this.toDoService.getItems(user.username());
     }
 
     @GetMapping("/{id}")
-    public ItemDTO getItem(CurrentUser user, @PathVariable Long id){
+    public ItemDTO getItem(UserTokenData user, @PathVariable Long id){
         return this.toDoService.getItem(user.username(), id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
     }
 
     @PostMapping
-    public void addItem(CurrentUser user, @RequestBody NewItemDTO item){
+    public void addItem(UserTokenData user, @RequestBody NewItemDTO item){
         item.validate();
         this.toDoService.addItem(user.username(), item);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteItem(CurrentUser user, @PathVariable Long id){
+    public void deleteItem(UserTokenData user, @PathVariable Long id){
         this.toDoService.deleteItem(user.username(), id);
     }
 
     @PutMapping("/{id}")
-    public void updateItem(CurrentUser user, @PathVariable Long id, @RequestBody UpdateDTO item){
+    public void updateItem(UserTokenData user, @PathVariable Long id, @RequestBody UpdateDTO item){
         item.validate();
         this.toDoService.updateItem(user.username(), id, item);
     }

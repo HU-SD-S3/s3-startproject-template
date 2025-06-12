@@ -1,6 +1,6 @@
 package nl.hu.s3.project.security;
 
-import nl.hu.s3.project.security.application.TokenService;
+import nl.hu.s3.project.security.application.JwtTokenService;
 import nl.hu.s3.project.security.presentation.filter.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,11 +57,11 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-		resolvers.add(new CurrentUserResolver());
+		resolvers.add(new UserTokenResolver());
 	}
 
 	@Bean
-	protected SecurityFilterChain filterChain(final HttpSecurity http, final AuthenticationManager authenticationManager, TokenService tokenService) throws Exception {
+	protected SecurityFilterChain filterChain(final HttpSecurity http, final AuthenticationManager authenticationManager, JwtTokenService tokenService) throws Exception {
 		http.cors(Customizer.withDefaults())
 		    .csrf(AbstractHttpConfigurer::disable)
 		    .authorizeHttpRequests(r -> r

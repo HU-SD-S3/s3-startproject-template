@@ -1,12 +1,9 @@
 package nl.hu.s3.project.security.domain;
 
-import nl.hu.s3.project.security.application.CurrentUser;
-
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity

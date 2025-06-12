@@ -1,11 +1,10 @@
 package nl.hu.s3.project.security.presentation.controller;
 
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
-import nl.hu.s3.project.security.application.UserService;
+import nl.hu.s3.project.security.application.SecurityService;
 import nl.hu.s3.project.security.domain.User;
 import nl.hu.s3.project.security.presentation.dto.Registration;
-import nl.hu.s3.project.security.presentation.dto.UserDTO;
+import nl.hu.s3.project.security.application.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
@@ -19,15 +18,15 @@ import java.util.Optional;
 @RolesAllowed(User.ROLE_ADMIN)
 public class UserManagementController {
 
-    private final UserService userService;
+    private final SecurityService userService;
 
-    public UserManagementController(UserService userService) {
+    public UserManagementController(SecurityService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/users")
     public List<UserDTO> getUsers(){
-        return userService.getUsers().stream().map(UserDTO::fromUser).toList();
+        return userService.getUsers();
     }
 
     @PostMapping("/users")
@@ -41,26 +40,30 @@ public class UserManagementController {
         return this.getUser(registration.username).orElseThrow();
     }
 
-    @GetMapping("/users/{id}")
-    public Optional<UserDTO> getUser(@PathVariable String id){
-        return Optional.ofNullable(userService.loadUserByUsername(id)).map(UserDTO::fromUser);
-    }
+    @GetMapping("/users/{username}")
+    public Optional<UserDTO> getUser(@PathVariable String username){
+        Optional<UserDTO> foundUser = this.userService.getUser(username);
 
-    @Transactional //Deze method slaat stiekem de service laag over, dus moet z'n eigen transactional hebben
-    @PutMapping("/users/{id}")
-    public Optional<UserDTO> getUser(@PathVariable String id, @Validated @RequestBody UserDTO userDto){
-        User user = userService.loadUserByUsername(id);
-        if(user == null){
+        if(foundUser.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        user.adminUpdate(userDto.firstName(), userDto.lastName(), userDto.enabled());
-        return Optional.of(UserDTO.fromUser(user));
+        return foundUser;
     }
 
-    @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable String id){
+    @PutMapping("/users/{username}")
+    public Optional<UserDTO> updateUser(@PathVariable String username, @Validated @RequestBody UserDTO userDto){
+        Optional<UserDTO> updatedUser = this.userService.updateUser(username, userDto);
+
+        if(updatedUser.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return updatedUser;
+    }
+
+    @DeleteMapping("/users/{username}")
+    public void deleteUser(@PathVariable String username){
         try{
-            userService.deleteUser(id);
+            userService.deleteUser(username);
         }catch (UsernameNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }

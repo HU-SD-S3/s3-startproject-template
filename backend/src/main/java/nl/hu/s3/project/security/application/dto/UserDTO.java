@@ -1,4 +1,4 @@
-package nl.hu.s3.project.security.presentation.dto;
+package nl.hu.s3.project.security.application.dto;
 
 import nl.hu.s3.project.security.domain.User;
 

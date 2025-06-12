@@ -1,8 +1,8 @@
 package nl.hu.s3.project.security.presentation.filter;
 
 
-import nl.hu.s3.project.security.application.TokenService;
-import nl.hu.s3.project.security.application.CurrentUser;
+import nl.hu.s3.project.security.application.JwtTokenService;
+import nl.hu.s3.project.security.application.UserTokenData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,10 +26,10 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
-    private final TokenService tokenService;
+    private final JwtTokenService tokenService;
 
     public JwtAuthorizationFilter(
-            TokenService tokenService,
+            JwtTokenService tokenService,
             AuthenticationManager authenticationManager
     ) {
         super(authenticationManager);
@@ -62,7 +62,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 return null;
             }
 
-            CurrentUser user = tokenService.validateToken(token.replace("Bearer ", ""));
+            UserTokenData user = tokenService.validateToken(token.replace("Bearer ", ""));
 
             return new UsernamePasswordAuthenticationToken(user, null, user.roles().stream().map(SimpleGrantedAuthority::new).toList());
         } catch (Exception e) {

@@ -33,4 +33,13 @@ public class UserDetailsAdapter implements UserDetails {
     public String getUsername() {
         return this.user.getUsername();
     }
+
+    public UserTokenData toToken() {
+        return new UserTokenData(
+                this.user.getUsername(),
+                this.user.getFirstName(),
+                this.user.getLastName(),
+                this.user.getRoles().stream().toList()
+        );
+    }
 }

@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class TokenService {
-    private final Logger logger = LoggerFactory.getLogger(TokenService.class);
+public class JwtTokenService {
+    private final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
     @Value("${security.jwt.expiration-in-ms}")
     private Integer jwtExpirationInMs;
@@ -24,7 +24,7 @@ public class TokenService {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    public String generateToken(CurrentUser user) {
+    public String generateToken(UserTokenData user) {
 
         List<String> roles = user.roles();
         String token = Jwts.builder()
@@ -42,7 +42,7 @@ public class TokenService {
         return token;
     }
 
-    public CurrentUser validateToken(String token) {
+    public UserTokenData validateToken(String token) {
         try {
             JwtParser jwtParser = Jwts.parser()
                     .verifyWith(this.getSigningKey())
@@ -61,10 +61,10 @@ public class TokenService {
                 throw new JwtException("Unable to validate token");
             }
 
-            return new CurrentUser(
+            return new UserTokenData(
                     username,
-                    (String) parsedToken.getBody().get("firstName"),
-                    (String) parsedToken.getBody().get("lastName"),
+                    (String) parsedToken.getPayload().get("firstName"),
+                    (String) parsedToken.getPayload().get("lastName"),
                     authorities
             );
         } catch (MalformedJwtException | SignatureException ex) {
