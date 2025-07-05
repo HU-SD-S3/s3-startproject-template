@@ -12,6 +12,7 @@
     "lit": "^3.1.4"
   },
   "devDependencies": {
+    "prettier": "^3.6.2",
     "vite": "^5.3.4"
   }
 }

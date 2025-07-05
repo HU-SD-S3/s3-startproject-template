@@ -1,11 +1,15 @@
-import { LitElement, css, html } from 'lit'
-import { LoginAttempted, LogoutRequested, RegisterRequested } from "../events.js"
+import { LitElement, css, html } from "lit";
+import {
+  LoginAttempted,
+  LogoutRequested,
+  RegisterRequested,
+} from "../events.js";
 
 export class LoginElement extends LitElement {
   static get properties() {
     return {
       username: { type: String },
-    }
+    };
   }
 
   input_username;
@@ -16,65 +20,75 @@ export class LoginElement extends LitElement {
     this.username = "";
   }
 
-  attemptLogin(){    
-    this.dispatchEvent(new LoginAttempted(this.input_username, this.input_password));
+  attemptLogin() {
+    this.dispatchEvent(
+      new LoginAttempted(this.input_username, this.input_password),
+    );
   }
 
-  requestRegister(){
+  requestRegister() {
     this.dispatchEvent(new RegisterRequested());
   }
 
-  requestLogout(){    
+  requestLogout() {
     this.dispatchEvent(new LogoutRequested());
   }
 
-  changeName(e){
+  changeName(e) {
     this.input_username = e.target.value;
   }
 
-  changePassword(e){
+  changePassword(e) {
     this.input_password = e.target.value;
   }
 
   render() {
-    if(!this.username){
-        return html`
+    if (!this.username) {
+      return html`
         <form>
+          <div>
             <div>
-                <div>
-                    <label for="name">Username:</label> 
-                    <input @change=${this.changeName} type="text" id="name" name="user_name" />
-                </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input @change=${this.changePassword} type="password" id="password" name="user_password" />
-                </div>
+              <label for="name">Username:</label>
+              <input
+                @change=${this.changeName}
+                type="text"
+                id="name"
+                name="user_name"
+              />
             </div>
             <div>
-                <button type="button" @click=${this.attemptLogin}>Login</button>
-                <button type="button" @click=${this.requestRegister}>Register</button>
+              <label for="password">Password:</label>
+              <input
+                @change=${this.changePassword}
+                type="password"
+                id="password"
+                name="user_password"
+              />
             </div>
-        </form>   
-    `
-    }else{
-        return html`
+          </div>
+          <div>
+            <button type="button" @click=${this.attemptLogin}>Login</button>
+            <button type="button" @click=${this.requestRegister}>
+              Register
+            </button>
+          </div>
+        </form>
+      `;
+    } else {
+      return html`
         <form>
-            <div>
-                Logged in as ${this.username}.
-            </div>
-            <div>
-                <button type="button" @click=${this.requestLogout}>Logout</button>                
-            </div>
-        </form>   
-    `
+          <div>Logged in as ${this.username}.</div>
+          <div>
+            <button type="button" @click=${this.requestLogout}>Logout</button>
+          </div>
+        </form>
+      `;
     }
-    
   }
 
   static get styles() {
-    return css`
-    `
+    return css``;
   }
 }
 
-window.customElements.define('s3-login', LoginElement)
+window.customElements.define("s3-login", LoginElement);

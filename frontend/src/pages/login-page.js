@@ -1,16 +1,13 @@
-import {css, html, LitElement} from "lit";
+import { css, html, LitElement } from "lit";
 
 export class LoginPage extends LitElement {
+  static get styles() {
+    return css``;
+  }
 
-    static get styles(){
-        return css`
-        `
-    }
-
-    render() {
-        return html`
-        Login`
-    }
+  render() {
+    return html` Login`;
+  }
 }
 
-window.customElements.define('login-page', LoginPage);
+window.customElements.define("login-page", LoginPage);

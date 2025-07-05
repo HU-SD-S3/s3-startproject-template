@@ -1,96 +1,95 @@
-const currentUserKey = "current"
-
+const currentUserKey = "current";
 
 const storage = window.sessionStorage;
 
 // alternatief: storage = window.localStorage;
 function setItem(key, obj) {
-    storage.setItem(key, JSON.stringify(obj));
+  storage.setItem(key, JSON.stringify(obj));
 }
 
 function getItem(key, obj) {
-    let result = storage.getItem(key, obj);
-    if (result) {
-        return JSON.parse(result);
-    } else {
-        return null;
-    }
+  let result = storage.getItem(key, obj);
+  if (result) {
+    return JSON.parse(result);
+  } else {
+    return null;
+  }
 }
 
 class LoginService {
-    constructor() {
+  constructor() {}
+
+  get isLoggedIn() {
+    return getItem(currentUserKey) != null;
+  }
+
+  get currentUser() {
+    return getItem(currentUserKey);
+  }
+
+  login(user, password) {
+    console.debug("login in service");
+    if (!user) {
+      throw new Error("username cannot be empty");
     }
 
-    get isLoggedIn() {
-        return getItem(currentUserKey) != null;
-    }
-
-    get currentUser() {
-        return getItem(currentUserKey);
-    }
-
-    login(user, password) {
-        console.debug('login in service')
-        if (!user) {
-            throw new Error('username cannot be empty');
+    return fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: user,
+        password: password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((r) => r.json())
+      .then((u) => {
+        if (u.error) {
+          throw new Error(u.message);
         }
+        setItem(currentUserKey, u);
+      });
+  }
 
-        return fetch("/api/login", {
-            method: "POST",
-            body: JSON.stringify({
-                username: user,
-                password: password
-            }),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(r => r.json()).then(u => {
-            if(u.error){
-                throw new Error(u.message)
-            }
-            setItem(currentUserKey, u);
-        });
-    }
+  register(registerData) {
+    return fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        username: registerData.username,
+        password: registerData.password,
+        firstName: registerData.firstname,
+        lastName: registerData.lastname,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 
-    register(registerData) {
-        return fetch("/api/register", {
-            method: "POST",
-            body: JSON.stringify({
-                username: registerData.username,
-                password: registerData.password,
-                firstName: registerData.firstname,
-                lastName: registerData.lastname
-            }),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-    }
-
-    logout() {
-        storage.removeItem(currentUserKey)
-    }
+  logout() {
+    storage.removeItem(currentUserKey);
+  }
 }
-
 
 class FakeLoginService extends LoginService {
-    login(user, password) {
-        if (!user) {
-            throw new Error('username cannot be empty');
-        }
-
-        return Promise.resolve({
-            username: user,
-            token: "abc123"
-        }).then(u => {
-            setItem(currentUserKey, u);
-        });
+  login(user, password) {
+    if (!user) {
+      throw new Error("username cannot be empty");
     }
 
-    register(registerData) {
-        return Promise.resolve();
-    }
+    return Promise.resolve({
+      username: user,
+      token: "abc123",
+    }).then((u) => {
+      setItem(currentUserKey, u);
+    });
+  }
+
+  register(registerData) {
+    return Promise.resolve();
+  }
 }
 
-export const loginService= new LoginService();
+export const loginService = new LoginService();
 export const getCurrentUser = () => loginService.currentUser;
