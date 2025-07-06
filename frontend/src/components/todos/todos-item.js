@@ -21,8 +21,8 @@ export class TodosItem extends LitElement {
     this.strikeThrough = this.todo.completed;
   }
 
-  checkChanged(e) {
-    this.todo.completed = e.target.checked;
+  checkChanged(event) {
+    this.todo.completed = event.target.checked;
     this.strikeThrough = this.todo.completed;
     this.dispatchEvent(new TodosCheckChanged(this.todo));
   }

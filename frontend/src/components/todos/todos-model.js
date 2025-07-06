@@ -7,10 +7,12 @@ export class TodosModel {
     this.todos.push(todo);
   }
 
-  toggleCompleted(todo) {
-    const index = this.todos.findIndex((t) => t.id === todo.id);
+  /*eslint no-magic-numbers: ["error", { "ignore": [-1, 0] }]*/
+
+  toggleCompleted(targetTodo) {
+    const index = this.todos.findIndex((todo) => todo.id === targetTodo.id);
     if (index !== -1) {
-      this.todos[index].completed = !todo.completed;
+      this.todos[index].completed = !targetTodo.completed;
     }
   }
 

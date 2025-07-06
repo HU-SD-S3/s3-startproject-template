@@ -1,26 +1,28 @@
+/* eslint max-classes-per-file: "off" */
+/* eslint class-methods-use-this: "off" */
+// The getItem/setItem functions are encapsulated in the module and used across two classses
+// Eslint rrrreaally does not like this, but I'm not sure I agree.
+
 const currentUserKey = "current";
-
 const storage = window.sessionStorage;
-
 // alternatief: storage = window.localStorage;
-function setItem(key, obj) {
-  storage.setItem(key, JSON.stringify(obj));
-}
 
-function getItem(key, obj) {
-  let result = storage.getItem(key, obj);
+const setItem = function (key, obj) {
+  storage.setItem(key, JSON.stringify(obj));
+};
+
+const getItem = function (key, obj) {
+  const result = storage.getItem(key, obj);
   if (result) {
     return JSON.parse(result);
-  } else {
-    return null;
   }
-}
+  return null;
+};
 
 class LoginService {
-  constructor() {}
 
   get isLoggedIn() {
-    return getItem(currentUserKey) != null;
+    return getItem(currentUserKey) !== null;
   }
 
   get currentUser() {
@@ -28,7 +30,6 @@ class LoginService {
   }
 
   login(user, password) {
-    console.debug("login in service");
     if (!user) {
       throw new Error("username cannot be empty");
     }
@@ -37,18 +38,18 @@ class LoginService {
       method: "POST",
       body: JSON.stringify({
         username: user,
-        password: password,
+        password,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     })
-      .then((r) => r.json())
-      .then((u) => {
-        if (u.error) {
-          throw new Error(u.message);
+      .then((response) => response.json())
+      .then((loginResult) => {
+        if (loginResult.error) {
+          throw new Error(loginResult.message);
         }
-        setItem(currentUserKey, u);
+        setItem(currentUserKey, loginResult);
       });
   }
 
@@ -72,8 +73,9 @@ class LoginService {
   }
 }
 
+/* eslint no-unused-vars: "off" */
 class FakeLoginService extends LoginService {
-  login(user, password) {
+  login(user) {
     if (!user) {
       throw new Error("username cannot be empty");
     }
@@ -81,12 +83,12 @@ class FakeLoginService extends LoginService {
     return Promise.resolve({
       username: user,
       token: "abc123",
-    }).then((u) => {
-      setItem(currentUserKey, u);
+    }).then((loginResult) => {
+      setItem(currentUserKey, loginResult);
     });
   }
 
-  register(registerData) {
+  register() {
     return Promise.resolve();
   }
 }

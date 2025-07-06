@@ -19,16 +19,15 @@ export class AppElement extends LitElement {
     this.currentPage = "login";
   }
 
-  userChanged(e) {
-    this.currentUser = e.user;
+  userChanged(event) {
+    this.currentUser = event.user;
   }
 
-  navigate(e) {
-    this.currentPage = e.page;
+  navigate(event) {
+    this.currentPage = event.page;
   }
 
   render() {
-    console.log("app-user", this.currentUser);
     return html`
       <header>
         <img src=${huLogo} class="logo" alt="HU Logo" />

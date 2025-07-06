@@ -1,3 +1,7 @@
+/* eslint class-methods-use-this: "off" */
+// The current user is now passed as an argument, but that's quite plausible to change.
+// with TodosService as a class any later changes will have less public API impact
+
 export class TodosService {
   getTodos(currentUser) {
     return fetch("/api/todos", {
@@ -5,11 +9,11 @@ export class TodosService {
         Authorization: `Bearer ${currentUser.token}`,
         Accept: "application/json",
       },
-    }).then((r) => r.json());
+    }).then((response) => response.json());
   }
 
   updateTodo(currentUser, todo) {
-    return fetch("/api/todos/" + todo.id, {
+    return fetch(`/api/todos/${todo.id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${currentUser.token}`,
@@ -21,7 +25,7 @@ export class TodosService {
   }
 
   deleteTodo(currentUser, todo) {
-    return fetch("/api/todos/" + todo.id, {
+    return fetch(`/api/todos/${todo.id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${currentUser.token}`,

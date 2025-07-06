@@ -12,8 +12,8 @@ export class LoginElement extends LitElement {
     };
   }
 
-  input_username;
-  input_password;
+  inputUsername;
+  inputPassword;
 
   constructor() {
     super();
@@ -22,7 +22,7 @@ export class LoginElement extends LitElement {
 
   attemptLogin() {
     this.dispatchEvent(
-      new LoginAttempted(this.input_username, this.input_password),
+      new LoginAttempted(this.inputUsername, this.inputPassword),
     );
   }
 
@@ -34,12 +34,12 @@ export class LoginElement extends LitElement {
     this.dispatchEvent(new LogoutRequested());
   }
 
-  changeName(e) {
-    this.input_username = e.target.value;
+  changeName(event) {
+    this.inputUsername = event.target.value;
   }
 
-  changePassword(e) {
-    this.input_password = e.target.value;
+  changePassword(event) {
+    this.inputPassword = event.target.value;
   }
 
   render() {
@@ -74,16 +74,15 @@ export class LoginElement extends LitElement {
           </div>
         </form>
       `;
-    } else {
-      return html`
-        <form>
-          <div>Logged in as ${this.username}.</div>
-          <div>
-            <button type="button" @click=${this.requestLogout}>Logout</button>
-          </div>
-        </form>
-      `;
     }
+    return html`
+      <form>
+        <div>Logged in as ${this.username}.</div>
+        <div>
+          <button type="button" @click=${this.requestLogout}>Logout</button>
+        </div>
+      </form>
+    `;
   }
 
   static get styles() {

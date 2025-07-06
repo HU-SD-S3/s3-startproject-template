@@ -1,3 +1,4 @@
+/* eslint max-classes-per-file: "off" */
 export class LogoutRequested extends Event {
   constructor() {
     super("request-logout", {

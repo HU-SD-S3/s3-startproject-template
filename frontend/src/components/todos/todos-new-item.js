@@ -40,7 +40,7 @@ export class TodosNewItem extends LitElement {
 
   completeEdit() {
     this.editing = false;
-    let title = this.shadowRoot.querySelector('input[type="text"]').value;
+    const title = this.shadowRoot.querySelector('input[type="text"]').value;
     this.dispatchEvent(new TodoCompleted({ title }));
   }
 

@@ -32,7 +32,7 @@ export class TodosList extends LitElement {
   }
 
   deleteTodo(todo) {
-    return (e) => {
+    return () => {
       this.todosService
         .deleteTodo(this.currentUser, todo)
         .then(() => this.#refresh());
@@ -40,16 +40,16 @@ export class TodosList extends LitElement {
   }
 
   todoChanged(todo) {
-    return (e) => {
+    return () => {
       this.todosService
         .updateTodo(this.currentUser, todo)
         .then(() => this.#refresh());
     };
   }
 
-  createTodo(e) {
+  createTodo(event) {
     this.todosService
-      .addTodo(this.currentUser, e.todo)
+      .addTodo(this.currentUser, event.todo)
       .then(() => this.#refresh());
   }
 
@@ -60,7 +60,7 @@ export class TodosList extends LitElement {
       <ul>
         ${repeat(
           this.model.todos,
-          (t) => t.id,
+          (todo) => todo.id,
           (todo) =>
             html` <li>
               <todos-item

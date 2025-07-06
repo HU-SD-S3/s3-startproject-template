@@ -1,3 +1,4 @@
+/* eslint max-classes-per-file: "off" */
 export class TodosCheckChanged extends Event {
   constructor(todo) {
     super("todos-check-changed", {

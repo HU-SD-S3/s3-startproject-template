@@ -19,8 +19,8 @@ export class CurrentUserElement extends LitElement {
     this.currentUser = loginService.currentUser;
   }
 
-  logout(e) {
-    e.stopPropagation();
+  logout(event) {
+    event.stopPropagation();
 
     this.error = "";
     this.loginService.logout();
@@ -28,41 +28,41 @@ export class CurrentUserElement extends LitElement {
     this.dispatchEvent(new UserChanged(this.currentUser));
   }
 
-  navigateRegister(e) {
-    e.stopPropagation();
+  navigateRegister(event) {
+    event.stopPropagation();
 
     this.error = "";
     this.registering = true;
   }
 
-  navigateLogin(e) {
-    e.stopPropagation();
+  navigateLogin(event) {
+    event.stopPropagation();
 
     this.error = "";
     this.registering = false;
   }
 
-  login(e) {
-    e.stopPropagation();
+  login(event) {
+    event.stopPropagation();
 
     this.error = "";
     this.loginService
-      .login(e.username, e.password)
+      .login(event.username, event.password)
       .then(() => {
         this.currentUser = this.loginService.currentUser;
         this.dispatchEvent(new UserChanged(this.currentUser));
       })
-      .catch((e) => {
-        this.error = e.message;
+      .catch((error) => {
+        this.error = error.message;
       });
   }
 
-  register(e) {
+  register(event) {
     this.loginService
-      .register(e.data)
-      .then(() => {
-        return this.loginService.login(e.data.username, e.data.password);
-      })
+      .register(event.data)
+      .then(() =>
+        this.loginService.login(event.data.username, event.data.password),
+      )
       .then(() => {
         this.currentUser = this.loginService.currentUser;
         this.registering = false;
@@ -72,7 +72,7 @@ export class CurrentUserElement extends LitElement {
 
   render() {
     //Later behandelen we 'routing', wat een mooiere manier is om dit op te lossen.
-    let error = html`<span class="error">${this.error}</span>`;
+    const error = html`<span class="error">${this.error}</span>`;
 
     if (this.registering) {
       return html` ${error}
@@ -80,17 +80,16 @@ export class CurrentUserElement extends LitElement {
           @attempt-register=${this.register}
           @request-login=${this.navigateLogin}
         ></s3-register>`;
-    } else {
-      return html`
-        ${error}
-        <s3-login
-          @request-logout=${this.logout}
-          @request-register=${this.navigateRegister}
-          @attempt-login=${this.login}
-          username=${this.currentUser?.username}
-        ></s3-login>
-      `;
     }
+    return html`
+      ${error}
+      <s3-login
+        @request-logout=${this.logout}
+        @request-register=${this.navigateRegister}
+        @attempt-login=${this.login}
+        username=${this.currentUser?.username}
+      ></s3-login>
+    `;
   }
 
   static get styles() {

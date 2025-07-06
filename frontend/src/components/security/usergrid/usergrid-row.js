@@ -16,15 +16,15 @@ export class UsergridRow extends LitElement {
     this.editing = false;
   }
 
-  startEdit(e) {
+  startEdit() {
     this.editing = true;
   }
 
-  cancelEdit(e) {
+  cancelEdit() {
     this.editing = false;
   }
 
-  saveEdit(e) {
+  saveEdit() {
     const firstName = this.renderRoot.querySelector(
       'input[name="firstName"]',
     ).value;

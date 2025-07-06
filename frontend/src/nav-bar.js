@@ -15,10 +15,7 @@ export class NavBar extends LitElement {
     };
   }
 
-  constructor() {
-    super();
-    this.currentUser = undefined;
-  }
+  currentUser;
 
   static get styles() {
     return css`
@@ -40,7 +37,7 @@ export class NavBar extends LitElement {
   }
 
   requestNav(target) {
-    return (e) => {
+    return () => {
       this.dispatchEvent(new NavEvent(target));
     };
   }
@@ -62,11 +59,10 @@ export class NavBar extends LitElement {
         )}
         ${when(
           this.currentUser && this.currentUser.username === "admin",
-          () => {
-            return html` <li>
+          () =>
+            html` <li>
               <a @click=${this.requestNav("admin")}>Admin</a>
-            </li>`;
-          },
+            </li>`,
         )}
       </ul>
     </nav>`;

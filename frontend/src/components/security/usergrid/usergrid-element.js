@@ -23,23 +23,25 @@ export class UsergridElement extends LitElement {
       .then((users) => {
         this.users = users;
       })
-      .catch((e) => {
+      .catch(() => {
         this.users = [];
       });
   }
 
   updated(_changedProperties) {
     if (_changedProperties.has("currentUser")) {
-      return this.#refresh();
+      this.#refresh();
     }
   }
 
-  delete(e) {
-    this.gridService.deleteUser(e.user.username).then(() => this.#refresh());
+  delete(event) {
+    this.gridService
+      .deleteUser(event.user.username)
+      .then(() => this.#refresh());
   }
 
-  save(e) {
-    this.gridService.updateUser(e.user).then(() => this.#refresh());
+  save(event) {
+    this.gridService.updateUser(event.user).then(() => this.#refresh());
   }
 
   render() {
@@ -58,9 +60,9 @@ export class UsergridElement extends LitElement {
           <tbody>
             ${map(
               this.users,
-              (u) => html`
+              (user) => html`
                 <usergrid-row
-                  .user="${u}"
+                  .user="${user}"
                   @user-save="${this.save}"
                   @user-delete="${this.delete}"
                 ></usergrid-row>
@@ -69,9 +71,8 @@ export class UsergridElement extends LitElement {
           </tbody>
         </table>
       `;
-    } else {
-      return html`Only available for admins`;
     }
+    return html`Only available for admins`;
   }
 
   static get styles() {

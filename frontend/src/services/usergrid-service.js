@@ -1,13 +1,15 @@
 import { getCurrentUser } from "./login-service.js";
 
-export default class UsergridService {
-  constructor() {}
+/* eslint class-methods-use-this: "off" */
+// getCurrentUser is now a function import, but that's quite plausible to change.
+// with UserGridService as a class any later changes will have less public API impact
 
-  get isAdminLoggedIn() {
+export default class UsergridService {
+  static get isAdminLoggedIn() {
     return getCurrentUser()?.username === "admin";
   }
 
-  get #headers() {
+  static get #headers() {
     return {
       Authorization: `Bearer ${getCurrentUser()?.token}`,
       "Content-Type": "application/json",
@@ -15,34 +17,33 @@ export default class UsergridService {
   }
 
   getUsers() {
-    if (!this.isAdminLoggedIn) {
+    if (!UsergridService.isAdminLoggedIn) {
       return Promise.reject(new Error("Not authorized"));
     }
 
     return fetch("api/users", {
-      headers: this.#headers,
-    }).then((r) => {
-      if (r.ok) {
-        return r.json();
-      } else {
-        return r.json().then((e) => {
-          throw new Error(`Error fetchingusers: ${JSON.stringify(e)}`);
-        });
+      headers: UsergridService.#headers,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
       }
+      return response.json().then((event) => {
+        throw new Error(`Error fetchingusers: ${JSON.stringify(event)}`);
+      });
     });
   }
 
   getUser(id) {
     return fetch(`api/users/${id}`, {
-      headers: this.#headers,
-    }).then((r) => r.json());
+      headers: UsergridService.#headers,
+    }).then((resp) => resp.json());
   }
 
   createUser(user) {
     return fetch("api/users", {
       method: "POST",
       body: JSON.stringify(user),
-      headers: this.#headers,
+      headers: UsergridService.#headers,
     });
   }
 
@@ -50,14 +51,14 @@ export default class UsergridService {
     return fetch(`api/users/${user.username}`, {
       method: "PUT",
       body: JSON.stringify(user),
-      headers: this.#headers,
-    }).then((r) => r.json());
+      headers: UsergridService.#headers,
+    }).then((resp) => resp.json());
   }
 
   deleteUser(id) {
     return fetch(`api/users/${id}`, {
       method: "DELETE",
-      headers: this.#headers,
+      headers: UsergridService.#headers,
     });
   }
 }
