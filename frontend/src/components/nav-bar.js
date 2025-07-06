@@ -9,7 +9,7 @@ export class NavBar extends LitElement {
     };
   }
 
-  constructor(){
+  constructor() {
     super();
     this.currentUser = {};
   }
