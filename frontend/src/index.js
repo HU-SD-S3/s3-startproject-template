@@ -11,7 +11,7 @@ import "./components/todos/todos-list.js";
 import "./components/todos/todos-item.js";
 import "./components/todos/todos-new-item.js";
 
-import "./nav-bar.js";
+import "./components/nav-bar.js";
 
 import "./pages/admin-page.js";
 import "./pages/todos-page.js";

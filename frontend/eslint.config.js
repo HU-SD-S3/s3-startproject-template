@@ -20,7 +20,7 @@ export default [
           exceptMethods: ["render"], // Lit element may have render methods without reactive properties
         },
       ],
-      'func-names': ['error', "as-needed"], // otherwise it conflicts with func-style: expression
+      "func-names": ["error", "as-needed"], // otherwise it conflicts with func-style: expression
       "no-console": "warn",
       "sort-keys": "off",
       "sort-imports": "off",

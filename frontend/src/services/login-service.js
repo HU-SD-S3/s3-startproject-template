@@ -20,7 +20,6 @@ const getItem = function (key, obj) {
 };
 
 class LoginService {
-
   get isLoggedIn() {
     return getItem(currentUserKey) !== null;
   }

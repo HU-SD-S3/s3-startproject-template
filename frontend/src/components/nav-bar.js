@@ -1,12 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { when } from "lit/directives/when.js";
-
-export class NavEvent extends Event {
-  constructor(page) {
-    super("nav-requested");
-    this.page = page;
-  }
-}
+import { NavEvent } from "./events.js";
 
 export class NavBar extends LitElement {
   static get properties() {
@@ -15,7 +9,10 @@ export class NavBar extends LitElement {
     };
   }
 
-  currentUser;
+  constructor(){
+    super();
+    this.currentUser = {};
+  }
 
   static get styles() {
     return css`
@@ -50,7 +47,7 @@ export class NavBar extends LitElement {
           <a @click=${this.requestNav("login")}>Login</a>
         </li>
         ${when(
-          this.currentUser,
+          this.currentUser && this.currentUser.username,
           () => html`
             <li>
               <a @click=${this.requestNav("todos")}>Todos</a>
