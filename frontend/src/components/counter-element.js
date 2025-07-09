@@ -38,7 +38,7 @@ export class CounterElement extends LitElement {
   }
 
   onClick() {
-    this.counterService.increment().then(result => {
+    this.counterService.increment().then((result) => {
       this.count = result.value;
     });
   }
