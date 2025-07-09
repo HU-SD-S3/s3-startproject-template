@@ -6,7 +6,7 @@
     <!-- Deze .pom file kun je compleet negeren, de enige reden dat deze er staat is zodat je backend-folder gewoon netjes
          werkt als je direct deze directory opent in IntelliJ in plaats van de backend folder, of als je dit project
          direct vanuit IntelliJ 'git clone't.
-         
+
          (een veel-voorkomende, oninteressante vergissing)
      -->
 
