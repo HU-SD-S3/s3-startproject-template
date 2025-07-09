@@ -1,6 +1,4 @@
 import { LitElement, css, html } from "lit";
-import litLogo from "../assets/lit.svg";
-import viteLogo from "/vite.svg";
 import { CounterService } from "../services/counter-service.js";
 
 /**
@@ -25,7 +23,7 @@ export class CounterElement extends LitElement {
     this.count = 0;
   }
 
-  firstUpdated(_changedProperties) {
+  firstUpdated() {
     this.counterService.getCount().then((result) => {
       this.count = result.value;
     });
@@ -33,15 +31,15 @@ export class CounterElement extends LitElement {
 
   render() {
     return html`
-      <button @click=${this._onClick} part="button">
+      <button @click=${this.onClick} part="button">
         count is ${this.count}
       </button>
     `;
   }
 
-  _onClick() {
-    this.counterService.increment().then((r) => {
-      this.count = r.value;
+  onClick() {
+    this.counterService.increment().then(result => {
+      this.count = result.value;
     });
   }
 
