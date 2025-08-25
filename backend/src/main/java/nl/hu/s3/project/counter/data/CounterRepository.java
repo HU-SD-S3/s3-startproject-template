@@ -10,4 +10,6 @@ public interface CounterRepository {
     void remove(Counter counter);
 
     void add(Counter counter);
+
+    void update(Counter counter);
 }

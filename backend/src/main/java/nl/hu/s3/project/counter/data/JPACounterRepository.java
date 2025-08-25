@@ -27,4 +27,11 @@ public class JPACounterRepository implements CounterRepository{
     public void add(Counter counter) {
         this.entities.persist(counter);
     }
+
+    @Override
+    public void update(Counter counter) {
+        //JPA hoeft deze methode niet te implementeren:
+        //Elk object dat je -uit- een repository haalt wordt getracked, en @Transactional (in de service)
+        //zorgt er voor dat die wijzigingen gecommit worden aan het eind van elke methode.
+    }
 }

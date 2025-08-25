@@ -41,6 +41,7 @@ public class CounterService {
         for (int i = 0; i < times; i++) {
             counter.increment();
         }
+        counterRepository.update(counter);
         return new CounterDTO(counter.getValue());
     }
 
