@@ -5,7 +5,7 @@ import nl.hu.s3.project.counter.domain.Counter;
 import java.util.List;
 
 public class InMemoryCounter implements CounterRepository{
-    private Counter counter = new Counter();
+    private final Counter counter = new Counter();
 
     @Override
     public List<Counter> findAll() {

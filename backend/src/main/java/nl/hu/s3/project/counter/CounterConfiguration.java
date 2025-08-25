@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 @Configuration
 public class CounterConfiguration {
 
-    public static enum RepositoryType {
+    public enum RepositoryType {
         JPA, SQL, INMEMORY
     }
 
