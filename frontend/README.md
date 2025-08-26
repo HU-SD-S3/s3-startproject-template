@@ -12,12 +12,11 @@ There's a couple of extra scripts here:
 * `npm run dev` - Start a development server. The application will be available at `http://localhost:5173`.
 * `npm run build` - Build the application for production. The output will be in the dist folder. That won't be good enough
   to actually deploy, but it's a start.
-* `npm run prettier` - Runs the Prettier code formatter on the source files, which standardises all tabs/spaces.
+* `npm run format` - Runs the Prettier code formatter on the source files, which standardises all tabs/spaces.
 * `npm run lint` - Runs ESLint to check for common code issues.
 
 ESLint is currently configured pretty harshly, with all rules enabled. As an alternative, you could also use ```pluginJs.configs.recommended```
 instead of ```pluginJs.configs.all```.
-
 
 ## Vite
 
