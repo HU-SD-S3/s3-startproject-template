@@ -1,18 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { CounterService } from "../services/counter-service.js";
 
-/**
- * An example element.
- *
- * @slot - This element has a slot
- * @csspart button - The button
- */
 export class CounterElement extends LitElement {
   static get properties() {
     return {
-      /**
-       * The number of times the button has been clicked.
-       */
       count: { type: Number },
     };
   }
@@ -31,7 +22,7 @@ export class CounterElement extends LitElement {
 
   render() {
     return html`
-      <button @click=${this.onClick} part="button">
+      <button type="button" @click=${this.onClick}>
         count is ${this.count}
       </button>
     `;
