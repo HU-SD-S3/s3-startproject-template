@@ -5,7 +5,8 @@
 
 Beschrijf in dit hoofdstuk de organisatie voor die je dit project gaat uitvoeren,
 zodat de lezer een goed beeld krijgt van de context waarin het project zich afspeelt.
-Ga echter nog niet vermelden wat de opdracht is, dat komt later in de documentatie aan bod.
+
+Ga echter nog niet vermelden wat exact de opdracht is, dat komt later in de documentatie aan bod.
 Het gaat er meer om dat de lezer een goed beeld heeft voor wie de opdracht wordt uitgevoerd.
 
 Denk hierbij aan de volgende vragen:
@@ -15,10 +16,7 @@ Denk hierbij aan de volgende vragen:
 - Wat is de core business van de organisatie?
 - Hoe is de organisatie ingericht / welke afdelingen zijn er?
 - Voor welke afdeling werkt de opdrachtgever?
+- Wie zijn er (voor zover bekend) direct betrokken bij het project?
 - ...
+
 ```
-
----
-
-:arrow_backward: [Home](../README.md) | :arrow_up: [Visie-Scope](./README.md) | :arrow_forward:
-[Aanleiding](./aanleiding.md)

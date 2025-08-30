@@ -3,10 +3,8 @@
 ```text
 !!! Vervang deze tekst door de inhoud van dit hoofdstuk. !!!
 
-In dit hoofdstuk dien je een korte inleiding voor dit hoofdstuk te schrijven die de lezer een idee geeft welke informatie er in dit hoofdstuk te vinden is.
-Neem hierin ook links op naar de subhoofdstukken die in dit hoofdstuk te vinden zijn.
+Leg uit wat het probleem van de opdrachtgever is, en waarom kennelijk ICT een beoogd onderdeel van de oplossing is.
+
+Het doel van dit hoofdstuk is dat de lezer begrijpt wat het probleem is dat opgelost moet worden, zodat de slimheid van jullie oplossing ook op een later moment voldoende gewaardeerd kan worden.
+
 ```
-
----
-
-:arrow_backward: [Organisatorisch Context](./organisatorische-context.md) | :arrow_up: [Visie-Scope](./README.md) | :arrow_forward:[Procesbeschrijving](./processbeschrijving.md)
