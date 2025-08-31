@@ -49,5 +49,5 @@ Alternatively, run `mvn spring-boot:start` on the commandline.
 
 The Frontend is a Lit-Element application written in plain Javascript. It uses npm as package manager.
 To start the frontend, navigate to the `frontend` folder and run `npm install` to install the dependencies.
-Then run `npm start` to start a development server. The application will be available at `http://localhost:5173`.
+Then run `npm run dev` to start a development server. The application will be available at `http://localhost:5173`.
 
